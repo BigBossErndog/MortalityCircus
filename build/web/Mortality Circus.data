@@ -1,0 +1,54 @@
+Nodes:load("ui/Borders")
+Nodes:load("sprites/Morti")
+
+Creator:createWorld({
+    window = {
+        width = 1280,
+        height = 720,
+        virtualWidth = 320,
+        virtualHeight = 180,
+
+        backgroundColor = "#294d6a",
+
+        screenMode = ScreenMode.Windowed,
+        
+        title = "Mortality Circus"
+    },
+
+    onPreload = function(self)
+        self.load:font("defaultFont", "fonts/PixelMplus10-Regular.ttf", 10)
+
+        self.load:spritesheet("morti", "morti.png", 112, 160)
+    end,
+    
+    onCreate = function(self)
+        self:createChild("Borders", {
+            depth = 100
+        })
+        self:createChild("Morti", {
+            y = 16
+        })
+    end,
+
+    onUpdate = function(self, deltaTime)
+
+    end
+})Nodes:define("Morti", "Sprite", {
+    texture = "morti"
+})Nodes:define("Borders", "Group", {
+    onCreate = function(self)
+        self:createChild("FillRect", {
+            color = Colors.Black,
+            origin = 0,
+            x = self.world.left, y = self.world.top,
+            width = self.world.width, height = 32,
+        })
+
+        self:createChild("FillRect", {
+            color = Colors.Black,
+            origin = { 0, 1 },
+            x = self.world.left, y = self.world.bottom,
+            width = self.world.width, height = 32,
+        })
+    end
+})
