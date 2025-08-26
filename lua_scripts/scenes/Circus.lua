@@ -1,13 +1,9 @@
 Nodes:load("sprites/Player")
 
 Nodes:load("obstacles/Spike")
+Nodes:load("obstacles/Spinsaw")
 
 Nodes:define("Circus", "Scene", {
-    onPreload = function(self)
-        self.load:spritesheet("tiles", "tilemaps/tiles.png", 16, 16)
-        self.load:tilemap("test", "tilemaps/test.tmx")
-    end,
-
     onCreate = function(self)
         local player = self:createChild("Player", {
             y = 28
@@ -53,6 +49,18 @@ Nodes:define("Circus", "Scene", {
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
                     tileY = obstacle.tileY
+                })
+            elseif obstacle.id == 11 then
+                local spinsaw = self:createChild("Spinsaw", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY,
+                    targetX = obstacle.targetX,
+                    targetY = obstacle.targetY,
+                    startX = obstacle.startX,
+                    startY = obstacle.startY,
+                    depth = -1
                 })
             end
         end

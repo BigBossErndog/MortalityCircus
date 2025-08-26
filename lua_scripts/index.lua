@@ -23,15 +23,14 @@ Creator:createWorld({
 
         self.load:spritesheet("player", "sprites/player.png", 48, 48)
         self.load:spritesheet("morti", "sprites/morti.png", 112, 160)
+
+        self.load:image("spinsaw", "sprites/spinsaw.png")
+
+        self.load:spritesheet("tiles", "tilemaps/tiles.png", 16, 16)
+        self.load:tilemap("test", "tilemaps/test.tmx")
     end,
     
     onCreate = function(self)
-        -- self:createChild("Borders", {
-        --     depth = 100
-        -- })
-        -- self:createChild("Morti", {
-        --     y = 16
-        -- })
         self:createChild("Circus")
     end,
 

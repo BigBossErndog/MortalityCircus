@@ -28,9 +28,12 @@ Nodes:define("Spike", "Sprite", {
 
     onUpdate = function(self)
         if self.collider:overlaps(self.props.player.collider) then
-            self.tint = "red"
-        else
-            self.tint = "white"
+            if not self.props.player.props.dead then
+                self.props.player.func:die({
+                    cause = self,
+                    epicenter = self.pos + Vector2.new(8, 16)
+                })
+            end
         end
     end
 })

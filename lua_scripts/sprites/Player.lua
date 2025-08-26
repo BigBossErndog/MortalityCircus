@@ -38,6 +38,11 @@ Nodes:define("Player", "Sprite", {
             frameRate = 12,
             loop = false
         })
+        self.animations:add({
+            key = "dead",
+            texture = "player",
+            frame = 19
+        })
     end,
 
     onCreate = function(self)
@@ -61,55 +66,78 @@ Nodes:define("Player", "Sprite", {
     },
 
     onUpdate = function(self)
-        local anim = nil
-        
-        if self.collider:hasCollided(Direction.Down) then
-            anim = "idle"
-            self.collider.damping.x = 0.995
-            self.props.jumping = 0
-            if Controls:isDown("up") then
-                self.collider.velocity.y = -300
+        if not self.props.dead then
+            local anim = nil
+            
+            if self.collider:hasCollided(Direction.Down) then
+                anim = "idle"
+                self.collider.damping.x = 0.995
+                self.props.jumping = 0
+                if Controls:isDown("up") then
+                    self.collider.velocity.y = -300
+                    self.props.jumping = 1
+                    anim = "jumping"
+                end
+            elseif self.props.jumping ~= 2 then
                 self.props.jumping = 1
-                anim = "jumping"
             end
-        elseif self.props.jumping ~= 2 then
-            self.props.jumping = 1
-        end
 
-        local control = 0 -- for controlling left/right movement. Prevent moving if left and right are both pressed.
+            local control = 0 -- for controlling left/right movement. Prevent moving if left and right are both pressed.
 
-        if Controls:isDown("left") then
-            control = control - 120
-        end
-        if Controls:isDown("right") then
-            control = control + 120
-        end
-
-        if control ~= 0 then
-            if control < 0 then
-                self.scale.x = -1
+            if Controls:isDown("left") then
+                control = control - 120
             end
-            if control > 0 then
-                self.scale.x = 1
+            if Controls:isDown("right") then
+                control = control + 120
             end
-            if self.props.jumping == 0 then
-                anim = "run"
+
+            if control ~= 0 then
+                if control < 0 then
+                    self.scale.x = -1
+                end
+                if control > 0 then
+                    self.scale.x = 1
+                end
+                if self.props.jumping == 0 then
+                    anim = "run"
+                end
+            end
+
+            if self.props.jumping == 1 then
+                if self.collider.velocity.y > 0 and self.props.jumping == 1 then
+                    self.props.jumping = 2
+                    anim = "falling"
+                end
+            end
+
+            if control ~= 0 then
+                self.collider.velocity.x = control
+            end
+
+            if anim then
+                self.animation = anim
+            end
+        else
+            self.rotation = self.rotation + self.collider.velocity.x * 0.005
+        end
+    end,
+
+    die = function(self, config)
+        self.props.dead = true
+        self.animation = "dead"
+        self.collider.targets = nil
+
+        self:bringToFront()
+
+        self.collider.velocity.y = -300
+        self.collider.damping.x = 0
+
+        if config then
+            if config.epicenter then
+                self.collider.velocity.x = (self.x - config.epicenter.x) * 1.5
             end
         end
 
-        if self.props.jumping == 1 then
-            if self.collider.velocity.y > 0 and self.props.jumping == 1 then
-                self.props.jumping = 2
-                anim = "falling"
-            end
-        end
-
-        if control ~= 0 then
-            self.collider.velocity.x = control
-        end
-
-        if anim then
-            self.animation = anim
-        end
+        self.scene.camera:stopFollow()
     end
 })

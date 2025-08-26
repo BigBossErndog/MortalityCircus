@@ -1,4 +1,8 @@
 {
+    "build-directories": [
+        "assets"
+    ],
+    "compile-code": true,
     "executable-name": "Mortality Circus",
     "project-name": "Mortality Circus"
 }
