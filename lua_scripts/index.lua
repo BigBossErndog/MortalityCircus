@@ -1,7 +1,6 @@
 Nodes:load("ui/Borders")
 
 Nodes:load("sprites/Morti")
-Nodes:load("sprites/Player")
 
 Nodes:load("scenes/Circus")
 
@@ -11,7 +10,7 @@ Creator:createWorld({
         height = 720,
         virtualWidth = 320,
         virtualHeight = 180,
-        
+
         backgroundColor = "#294d6a",
 
         screenMode = ScreenMode.Windowed,

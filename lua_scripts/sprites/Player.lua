@@ -19,7 +19,7 @@ Nodes:define("Player", "Sprite", {
             texture = "player",
             startFrame = 5,
             endFrame = 12,
-            frameRate = 12,
+            frameRate = 15,
             loop = true
         })
         self.animations:add({

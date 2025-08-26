@@ -1,6 +1,10 @@
+Nodes:load("sprites/Player")
+
+Nodes:load("obstacles/Spike")
+
 Nodes:define("Circus", "Scene", {
     onPreload = function(self)
-        self.load:image("tiles", "tilemaps/tiles.png")
+        self.load:spritesheet("tiles", "tilemaps/tiles.png", 16, 16)
         self.load:tilemap("test", "tilemaps/test.tmx")
     end,
 
@@ -34,6 +38,24 @@ Nodes:define("Circus", "Scene", {
 
         player.collider:addCollisionTarget(leftBound)
         player.collider:addCollisionTarget(rightBound)
+
+        local obstacles = tilemap.objects.obstacles
+        
+        for i = 1, #obstacles do
+            local obstacle = obstacles[i]
+            
+            if obstacle.id == 10 then
+                player.x = tilemap.left + (obstacle.tileX + 0.5) * 16
+                player.y = tilemap.top + (obstacle.tileY + 0.5) * 16 - 8.1
+            elseif obstacle.id == 4 then
+                local spike = self:createChild("Spike", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY
+                })
+            end
+        end
         
         self.camera:startFollow(player, 0.95)
         self.camera.bounds = tilemap.rect
