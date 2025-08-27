@@ -34,28 +34,36 @@ Nodes:define("Spring", "Sprite", {
     end,
 
     onUpdate = function(self)
+        local player = self.props.player
+
         self.cropTop = self.props.pad.y + 16 + 1
-        if self.props.state == 1 then
-            if self.collider:overlaps(self.props.player.collider) then
+        if self.props.state == 1 and not player.props.dead then
+            if self.collider:overlaps(player.collider) then
                 self.props.state = 2
 
                 if self.props.player.y > self.y - 16.1 then
                     self.props.player.y = self.y - 16.1
                 end
 
-                self.props.player.collider.velocity.y = -450
-                self.props.player.props.jumping = 1
-                self.props.player.animation = "jumping"
+                player.collider.velocity.y = -450
+                player.props.jumping = 1
+                player.props.bounced = true
+                player.animation = "jumping"
 
                 self.collider.shape = Rectangle.new(-8, -16, 16, 16)
+
+                self:createChild("Action", {
+                    onAct = function(actor, action)
+                        if not self.collider:overlaps(player.collider) then
+                            self.props.player.collider:addCollisionTarget(self)
+                        end
+                    end
+                })
 
                 self.props.pad.tween:to({
                     y = -16,
                     duration = 0.4,
-                    ease = Ease.ElasticOut,
-                    onComplete = function()
-                        self.props.player.collider:addCollisionTarget(self)
-                    end
+                    ease = Ease.ElasticOut
                 })
             end
         end

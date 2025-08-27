@@ -49,7 +49,7 @@ Nodes:define("Spinsaw", "Sprite", {
         end
 
         self:createChild("Collider", {
-            shape = Circle.new(0, 0, 10)
+            shape = Circle.new(0, 0, 8)
         })
 
         self.func:moveToTarget()

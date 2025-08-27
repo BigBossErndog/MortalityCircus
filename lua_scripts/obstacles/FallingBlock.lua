@@ -47,6 +47,7 @@ Nodes:define("FallingBlock", "Sprite", {
         self:wait(0.25):next(function()
             self:bringToFront()
             self.collider.acceleration.y = 800
+            self.props.player.collider:removeCollisionTarget(self.collider)
         end)
     end
 })

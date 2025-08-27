@@ -1,4 +1,5 @@
 Nodes:load("sprites/CameraTarget.lua")
+Nodes:load("actions/Invincibility.lua")
 
 Nodes:define("Player", "Sprite", {
     texture = "player",
@@ -45,6 +46,20 @@ Nodes:define("Player", "Sprite", {
             texture = "player",
             frame = 19
         })
+        self.animations:add({
+            key = "hurting",
+            texture = "player",
+            frame = 20,
+        })
+    end,
+
+    onConfigure = function(self, config)
+        if config.tilemap then
+            self.props.tilemap = config.tilemap
+        end
+        if config.healthBar then
+            self.props.healthBar = config.healthBar
+        end
     end,
 
     onCreate = function(self)
@@ -67,60 +82,78 @@ Nodes:define("Player", "Sprite", {
     collider = {
         shape = Rectangle.new(-10, -18, 20, 34),
         acceleration = { 0, 800 },
-        damping = { 0.995, 0 }
+        damping = { 0.998, 0 }
     },
 
     onUpdate = function(self)
         if not self.props.dead then
-            local anim = nil
-            
-            if self.collider:hasCollided(Direction.Down) then
-                anim = "idle"
-                self.collider.damping.x = 0.995
-                self.props.jumping = 0
-                if Controls:isDown("up") then
-                    self.collider.velocity.y = -300
-                    self.props.jumping = 1
-                    anim = "jumping"
+            if not self.props.hurting then
+                local anim = nil
+                
+                if not self.props.bounced then
+                    if self.collider:hasCollided(Direction.Down) then
+                        anim = "idle"
+                        self.collider.damping.x = 0.998
+                        self.props.jumping = 0
+                        if Controls:isDown("up") then
+                            self.collider.velocity.y = -300
+                            self.props.jumping = 1
+                            anim = "jumping"
+                        end
+                    elseif self.props.jumping ~= 2 then
+                        self.props.jumping = 1
+                    end
+                else
+                    self.props.bounced = false
+                    if self.collider:hasCollided(Direction.Down) then
+                        self.collider.damping.x = 0.998
+                    end
                 end
-            elseif self.props.jumping ~= 2 then
-                self.props.jumping = 1
-            end
 
-            local control = 0 -- for controlling left/right movement. Prevent moving if left and right are both pressed.
+                local control = 0 -- for controlling left/right movement. Prevent moving if left and right are both pressed.
 
-            if Controls:isDown("left") then
-                control = control - 120
-            end
-            if Controls:isDown("right") then
-                control = control + 120
-            end
-
-            if control ~= 0 then
-                if control < 0 then
-                    self.scale.x = -1
+                if Controls:isDown("left") then
+                    control = control - 120
                 end
-                if control > 0 then
-                    self.scale.x = 1
+                if Controls:isDown("right") then
+                    control = control + 120
                 end
-                if self.props.jumping == 0 then
-                    anim = "run"
+
+                if control ~= 0 then
+                    if control < 0 then
+                        self.scale.x = -1
+                    end
+                    if control > 0 then
+                        self.scale.x = 1
+                    end
+                    if self.props.jumping == 0 then
+                        anim = "run"
+                    end
+                end
+
+                if self.props.jumping == 1 then
+                    if self.collider.velocity.y > 0 and self.props.jumping == 1 then
+                        self.props.jumping = 2
+                        anim = "falling"
+                    end
+                end
+
+                if control ~= 0 then
+                    self.collider.velocity.x = control
+                end
+
+                if anim then
+                    self.animation = anim
                 end
             end
 
-            if self.props.jumping == 1 then
-                if self.collider.velocity.y > 0 and self.props.jumping == 1 then
-                    self.props.jumping = 2
-                    anim = "falling"
-                end
-            end
-
-            if control ~= 0 then
-                self.collider.velocity.x = control
-            end
-
-            if anim then
-                self.animation = anim
+            if self.y > self.props.tilemap.bottom then
+                self.func:die({
+                    epicenter = {
+                        x = self.x - self.collider.velocity.x * 0.02,
+                        y = self.y + 32
+                    }
+                })
             end
         else
             self.rotation = self.rotation + self.collider.velocity.x * 0.002
@@ -128,7 +161,27 @@ Nodes:define("Player", "Sprite", {
     end,
 
     hurt = function(self, config)
-        self.func:die(config)
+        if (not self.props.invincible) and (not self.props.dead) then
+            if not self.props.healthBar.func:hurt() then
+                if (not self.props.hurting) and config then
+                    if config.epicenter then
+                        self.collider.velocity.x = (self.x - config.epicenter.x) * 4
+                        self.collider.velocity.y = (self.y - config.epicenter.y) * 4
+                        self.props.hurting = true
+                        self.animation = "hurting"
+                        self.collider.damping.x = 0
+                        self:wait(0.4):next(function()
+                            self.props.hurting = false
+                        end)
+                    end
+                end
+                self:createChild("Invincibility", {
+
+                })
+            else
+                self.func:die(config)
+            end
+        end
     end,
 
     die = function(self, config)
@@ -147,6 +200,19 @@ Nodes:define("Player", "Sprite", {
             end
         end
 
+        self.props.healthBar.func:killAll()
+
         self.scene.camera:stopFollow()
+
+        self:wait(1, function()
+            self.scene:createChild("FillTransition", {
+                next = {
+                    node = "GameOver",
+                    props = GameOvers.dead
+                },
+                fade = 1,
+                interim = 0.5
+            })
+        end)
     end
 })

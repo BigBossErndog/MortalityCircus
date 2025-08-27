@@ -4,29 +4,52 @@ Nodes:load("obstacles/Spike")
 Nodes:load("obstacles/Spinsaw")
 Nodes:load("obstacles/Spring")
 Nodes:load("obstacles/FallingBlock")
+Nodes:load("obstacles/Money")
+Nodes:load("obstacles/Heart")
+
+Nodes:load("sprites/HealthBar")
 
 Nodes:define("Circus", "Scene", {
+    props = {
+        tilemap = "test",
+        endingAct = false
+    },
+
+    onConfigure = function(self, config)
+        if config.tilemap then
+            self.props.tilemap = config.tilemap
+        end
+    end,
+
     onCreate = function(self)
         self.props.bg = self:createChild("Sprite", {
             fixedToCamera = true,
             texture = "circus_bg",
             depth = -100,
             onUpdate = function(self)
-                self.x = -self.scene.camera.scroll.x * 0.1
-                self.y = -self.scene.camera.scroll.y * 0.1
+                self.x = -self.scene.camera.scroll.x * 0.04
+                self.y = -self.scene.camera.scroll.y * 0.04
             end
-        })
-
-        local player = self:createChild("Player", {
-            y = 28
         })
 
         local tilemap = self:createChild("Tilemap", {
             texture = "tiles",
-            tilemap = "test",
+            tilemap = self.props.tilemap,
             origin = 0.5
         })
         local floor = tilemap.children["floor"]
+
+        local healthBar = self:createChild("HealthBar", {
+            depth = 100,
+            x = self.camera.left + 16,
+            y = self.camera.top + 16
+        })
+
+        local player = self:createChild("Player", {
+            y = 28,
+            tilemap = tilemap,
+            healthBar = healthBar
+        })
 
         player.collider.target = floor
 
@@ -84,6 +107,38 @@ Nodes:define("Circus", "Scene", {
                 })
             elseif obstacle.id == 13 then
                 local fallingBlock = self:createChild("FallingBlock", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY
+                })
+            elseif obstacle.id == 5 then
+                local money = self:createChild("Money", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY
+                })
+            elseif obstacle.id == 6 then
+                local money = self:createChild("Money", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY,
+                    value = 25,
+                    frame = 7
+                })
+            elseif obstacle.id == 15 then
+                local money = self:createChild("Money", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY,
+                    value = 100,
+                    frame = 16
+                })
+            elseif obstacle.id == 7 then
+                local heart = self:createChild("Heart", {
                     player = player,
                     tilemap = tilemap,
                     tileX = obstacle.tileX,

@@ -15,7 +15,7 @@ Nodes:define("CameraTarget", "Node", {
     updatePosition = function(self)
         if Controls:isDown("down") then
             self.x = self.props.player.x
-            self.y = self.props.player.y + 32
+            self.y = self.props.player.y + 48
         else
             self.x = self.props.player.x
             self.y = self.props.player.y
