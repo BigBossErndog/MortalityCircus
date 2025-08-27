@@ -1,3 +1,5 @@
+Nodes:load("sprites/CameraTarget.lua")
+
 Nodes:define("Player", "Sprite", {
     texture = "player",
 
@@ -57,6 +59,9 @@ Nodes:define("Player", "Sprite", {
 
         local upControl = Controls:scheme("up")
         upControl.keys = { Key.W, Key.Up, Key.Space }
+
+        local downControl = Controls:scheme("down")
+        downControl.keys = { Key.S, Key.Down }
     end,
 
     collider = {
@@ -118,8 +123,12 @@ Nodes:define("Player", "Sprite", {
                 self.animation = anim
             end
         else
-            self.rotation = self.rotation + self.collider.velocity.x * 0.005
+            self.rotation = self.rotation + self.collider.velocity.x * 0.002
         end
+    end,
+
+    hurt = function(self, config)
+        self.func:die(config)
     end,
 
     die = function(self, config)
@@ -134,7 +143,7 @@ Nodes:define("Player", "Sprite", {
 
         if config then
             if config.epicenter then
-                self.collider.velocity.x = (self.x - config.epicenter.x) * 1.5
+                self.collider.velocity.x = (self.x - config.epicenter.x) * 5
             end
         end
 

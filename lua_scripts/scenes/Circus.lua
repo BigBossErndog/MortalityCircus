@@ -2,9 +2,21 @@ Nodes:load("sprites/Player")
 
 Nodes:load("obstacles/Spike")
 Nodes:load("obstacles/Spinsaw")
+Nodes:load("obstacles/Spring")
+Nodes:load("obstacles/FallingBlock")
 
 Nodes:define("Circus", "Scene", {
     onCreate = function(self)
+        self.props.bg = self:createChild("Sprite", {
+            fixedToCamera = true,
+            texture = "circus_bg",
+            depth = -100,
+            onUpdate = function(self)
+                self.x = -self.scene.camera.scroll.x * 0.1
+                self.y = -self.scene.camera.scroll.y * 0.1
+            end
+        })
+
         local player = self:createChild("Player", {
             y = 28
         })
@@ -62,10 +74,27 @@ Nodes:define("Circus", "Scene", {
                     startY = obstacle.startY,
                     depth = -1
                 })
+            elseif obstacle.id == 12 then
+                local spring = self:createChild("Spring", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY,
+                    depth = -1
+                })
+            elseif obstacle.id == 13 then
+                local fallingBlock = self:createChild("FallingBlock", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY
+                })
             end
         end
-        
-        self.camera:startFollow(player, 0.95)
+
+        self:createChild("CameraTarget", {
+            player = player
+        })
         self.camera.bounds = tilemap.rect
     end
 })

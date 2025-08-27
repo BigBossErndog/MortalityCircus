@@ -86,7 +86,7 @@ Nodes:define("Spinsaw", "Sprite", {
         self.tint = Colors.White
         if self.props.player and not self.props.player.props.dead then
             if self.collider:overlaps(self.props.player.collider) then
-                self.props.player.func:die({
+                self.props.player.func:hurt({
                     epicenter = self.pos
                 })
             end

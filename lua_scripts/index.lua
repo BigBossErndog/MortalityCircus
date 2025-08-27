@@ -25,9 +25,12 @@ Creator:createWorld({
         self.load:spritesheet("morti", "sprites/morti.png", 112, 160)
 
         self.load:image("spinsaw", "sprites/spinsaw.png")
+        self.load:spritesheet("spring", "sprites/spring.png", 16, 16)
 
         self.load:spritesheet("tiles", "tilemaps/tiles.png", 16, 16)
         self.load:tilemap("test", "tilemaps/test.tmx")
+
+        self.load:image("circus_bg", "bg/circus_bg.png")
     end,
     
     onCreate = function(self)
