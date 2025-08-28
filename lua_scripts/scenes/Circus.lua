@@ -8,6 +8,7 @@ Nodes:load("obstacles/Money")
 Nodes:load("obstacles/Heart")
 
 Nodes:load("sprites/HealthBar")
+Nodes:load("sprites/TimeBoard")
 
 Nodes:define("Circus", "Scene", {
     props = {
@@ -30,6 +31,11 @@ Nodes:define("Circus", "Scene", {
                 self.x = -self.scene.camera.scroll.x * 0.04
                 self.y = -self.scene.camera.scroll.y * 0.04
             end
+        })
+
+        self.props.timer = self:createChild("TimeBoard", {
+            time = self.props.time,
+            depth = 100
         })
 
         local tilemap = self:createChild("Tilemap", {

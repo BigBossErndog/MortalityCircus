@@ -50,20 +50,22 @@ Nodes:define("Spring", "Sprite", {
                 player.props.bounced = true
                 player.animation = "jumping"
 
-                self.collider.shape = Rectangle.new(-8, -16, 16, 16)
-
-                self:createChild("Action", {
-                    onAct = function(actor, action)
-                        if not self.collider:overlaps(player.collider) then
-                            self.props.player.collider:addCollisionTarget(self)
-                        end
-                    end
-                })
-
                 self.props.pad.tween:to({
                     y = -16,
                     duration = 0.4,
-                    ease = Ease.ElasticOut
+                    ease = Ease.ElasticOut,
+                    onComplete = function()
+                        self:wait(2, function()
+                            self.props.pad.tween:to({
+                                y = -5,
+                                duration = 2,
+                                ease = Ease.SineInOut,
+                                onComplete = function()
+                                    self.props.state = 1
+                                end
+                            })
+                        end)
+                    end
                 })
             end
         end

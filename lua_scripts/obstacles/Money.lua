@@ -38,7 +38,7 @@ Nodes:define("Money", "Sprite", {
     onUpdate = function(self)
         local player = self.props.player
 
-        self.y = self.props.startY + math.sin(self.lifeTime * 2 + self.props.timeOffset)
+        self.y = self.props.startY + math.sin(self.lifeTime * 2 + self.props.timeOffset) * 2
 
         if not player.props.dead then
             if self.collider:overlaps(player.collider) then

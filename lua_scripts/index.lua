@@ -34,6 +34,7 @@ Creator:createWorld({
         self.load:tilemap("circus_map1", "tilemaps/circus_map1.tmx")
 
         self.load:image("circus_bg", "bg/circus_bg.png")
+        self.load:image("timeBoard", "sprites/timeBoard.png")
 
         self.load:image("gameOver_dead", "gameOver/gameOver_dead.png")
         self.load:image("gameOver_kickedOut", "gameOver/gameOver_kickedOut.png")

@@ -147,7 +147,7 @@ Nodes:define("Player", "Sprite", {
                 end
             end
 
-            if self.y > self.props.tilemap.bottom then
+            if (self.y > self.props.tilemap.bottom) and (not self.scene.props.timer.finished)  then
                 self.func:die({
                     epicenter = {
                         x = self.x - self.collider.velocity.x * 0.02,
@@ -204,14 +204,17 @@ Nodes:define("Player", "Sprite", {
 
         self.scene.camera:stopFollow()
 
+        self.scene.props.timer.func:stop()
+
         self:wait(1, function()
             self.scene:createChild("FillTransition", {
                 next = {
                     node = "GameOver",
                     props = GameOvers.dead
                 },
-                fade = 1,
-                interim = 0.5
+                fadeIn = 1,
+                fadeOut = 2,
+                interim = 1
             })
         end)
     end

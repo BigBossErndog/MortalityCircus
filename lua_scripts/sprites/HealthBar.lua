@@ -19,8 +19,13 @@ Nodes:define("HealthBar", "Group", {
         if setHealth then
             self.props.health = setHealth
         else
-            self.props.health = self.props.health + 1
+            if self.props.health < 5 then
+                self.props.health = self.props.health + 1
+            else
+                return false
+            end
         end
+        
         local heart = self:createChild("Sprite", {
             texture = "tiles",
             frame = 8,
@@ -32,6 +37,8 @@ Nodes:define("HealthBar", "Group", {
             tint = Colors.Red,
             duration = 0.5
         })
+
+        return true
     end,
 
     hurt = function(self)

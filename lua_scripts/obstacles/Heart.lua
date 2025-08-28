@@ -35,8 +35,9 @@ Nodes:define("Heart", "Sprite", {
 
         if not player.props.dead then
             if self.collider:overlaps(player.collider) then
-                player.props.healthBar.func:addHeart()
-                self:destroy()
+                if player.props.healthBar.func:addHeart() then
+                    self:destroy()
+                end
             end
         end
     end
