@@ -52,31 +52,15 @@ Nodes:define("Spinsaw", "Sprite", {
             shape = Circle.new(0, 0, 8)
         })
 
-        self.func:moveToTarget()
-    end,
-
-    moveToTarget = function(self)
         self.tween:to({
             x = self.props.targetX,
             y = self.props.targetY,
             duration = self.props.travelTime,
             ease = Ease.SineInOut,
-            onProgress = function()
-                -- print(self)
-            end,
+            yoyo = true,
+            repeats = -1,
             onComplete = function()
                 self.func:moveToStart()
-            end
-        })
-    end,
-    moveToStart = function(self)
-        self.tween:to({
-            x = self.props.startX,
-            y = self.props.startY,
-            duration = self.props.travelTime,
-            ease = Ease.SineInOut,
-            onComplete = function()
-                self.func:moveToTarget()
             end
         })
     end,

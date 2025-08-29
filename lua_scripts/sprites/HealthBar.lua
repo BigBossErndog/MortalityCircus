@@ -2,7 +2,7 @@ Nodes:define("HealthBar", "Group", {
     fixedToCamera = true,
 
     props = {
-        health = 2,
+        health = 3,
         hearts = {}
     },
     

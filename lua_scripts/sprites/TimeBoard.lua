@@ -18,18 +18,16 @@ Nodes:define("TimeBoard", "Sprite", {
         self.props.number = self:createChild("Text", {
             font = "defaultFont",
             x = 1,
-            y = self.height / 2 - 2
+            y = self.height / 2 - 2,
+            color = "#888888"
         })
 
-        self.y = self.scene.camera.top - self.height
+        self.y = self.world.top - self.height
         
         self.tween:to({
-            y = self.scene.camera.top,
+            y = self.world.top,
             duration = 1,
-            ease = Ease.SineOut,
-            onComplete = function()
-                self.props.isCounting = true
-            end
+            ease = Ease.SineOut
         })
 
         self.props.counter = self.props.time
@@ -38,6 +36,11 @@ Nodes:define("TimeBoard", "Sprite", {
 
     stop = function(self)
         self.props.stopped = true
+    end,
+
+    start = function(self)
+        self.props.isCounting = true
+        self.props.number.color = Colors.White
     end,
     
     onUpdate = function(self, deltaTime)
@@ -48,6 +51,30 @@ Nodes:define("TimeBoard", "Sprite", {
                 self.props.counter = 0
                 self.props.finished = true
                 self.func:stop()
+
+                self.scene.props.results.notFinish = true
+
+                self:wait(1, function()
+                    self.scene:createChild("EndSign", {
+                        onComplete = function()
+                            self.scene:createChild("FillTransition", {
+                                fadeIn = 1,
+                                fadeOut = 2,
+                                interim = 1,
+                                next = {
+                                    node = "CircusResults",
+                                    props = self.scene.props.results
+                                }
+                            })
+                        end
+                    })
+
+                    self.tween:to({
+                        y = self.world.top - self.height,
+                        duration = 1,
+                        ease = Ease.SineIn
+                    })
+                end)
             end
 
             self.props.number.text = string.format("%.2f", self.props.counter)

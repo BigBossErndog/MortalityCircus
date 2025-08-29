@@ -34,7 +34,7 @@ Nodes:define("FallingBlock", "Sprite", {
     end,
 
     onUpdate = function(self)
-        if (not self.props.falling) and (not self.props.player.props.dead) then
+        if (not self.props.falling) and (not self.props.player.props.dead) and (not self.scene.props.timer.props.finished) then
             self.y = self.props.startY - 1
             if self.collider:overlaps(self.props.player.collider) then
                 self.func:fall()

@@ -12,7 +12,7 @@ GameOvers = {
     gameOver_ranAway = {
         image = "gameOver_ranAway",
         title = "Life Abandoned",
-        desc = "Unable to take the pressure, flee"
+        desc = "Unable to take the pressure, you fled"
     }
 }
 
@@ -46,11 +46,11 @@ Nodes:define("GameOver", "Scene", {
         })
         self:wait(2, function()
             titleTxt:autoProgress({
-                speed = 10,
+                rate = 10,
                 onComplete = function()
                     self:wait(0.5, function()
                         descTxt:autoProgress({
-                            speed = 10,
+                            rate = 10,
                             onComplete = function()
                                 self:wait(2, function()
                                     self:createChild("FillTransition", {

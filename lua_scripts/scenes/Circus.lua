@@ -7,13 +7,18 @@ Nodes:load("obstacles/FallingBlock")
 Nodes:load("obstacles/Money")
 Nodes:load("obstacles/Heart")
 
+Nodes:load("obstacles/EndPost")
+
 Nodes:load("sprites/HealthBar")
 Nodes:load("sprites/TimeBoard")
+Nodes:load("sprites/EndSign")
+
+Nodes:load("scenes/CircusResults")
 
 Nodes:define("Circus", "Scene", {
     props = {
         tilemap = "test",
-        endingAct = false
+        endingAct = false,
     },
 
     onConfigure = function(self, config)
@@ -23,6 +28,13 @@ Nodes:define("Circus", "Scene", {
     end,
 
     onCreate = function(self)
+        self.props.results = {
+            moneyCollected = 0,
+            notFinish = false,
+            finished = false,
+            heartsLeft = 0
+        }
+
         self.props.bg = self:createChild("Sprite", {
             fixedToCamera = true,
             texture = "circus_bg",
@@ -44,12 +56,14 @@ Nodes:define("Circus", "Scene", {
             origin = 0.5
         })
         local floor = tilemap.children["floor"]
+        print(self.props.tilemap, tilemap.children.floor.tint)
 
         local healthBar = self:createChild("HealthBar", {
             depth = 100,
             x = self.camera.left + 16,
             y = self.camera.top + 16
         })
+        self.props.healthBar = healthBar
 
         local player = self:createChild("Player", {
             y = 28,
@@ -77,6 +91,10 @@ Nodes:define("Circus", "Scene", {
         player.collider:addCollisionTarget(rightBound)
 
         local obstacles = tilemap.objects.obstacles
+
+        self.props.cameraTarget = self:createChild("CameraTarget", {
+            player = player
+        })
         
         for i = 1, #obstacles do
             local obstacle = obstacles[i]
@@ -123,7 +141,8 @@ Nodes:define("Circus", "Scene", {
                     player = player,
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
-                    tileY = obstacle.tileY
+                    tileY = obstacle.tileY,
+                    value = 10
                 })
             elseif obstacle.id == 6 then
                 local money = self:createChild("Money", {
@@ -131,7 +150,7 @@ Nodes:define("Circus", "Scene", {
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
                     tileY = obstacle.tileY,
-                    value = 25,
+                    value = 20,
                     frame = 7
                 })
             elseif obstacle.id == 15 then
@@ -140,7 +159,7 @@ Nodes:define("Circus", "Scene", {
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
                     tileY = obstacle.tileY,
-                    value = 100,
+                    value = 50,
                     frame = 16
                 })
             elseif obstacle.id == 7 then
@@ -150,12 +169,17 @@ Nodes:define("Circus", "Scene", {
                     tileX = obstacle.tileX,
                     tileY = obstacle.tileY
                 })
+            elseif obstacle.id == 16 then
+                local endPost = self:createChild("EndPost", {
+                    player = player,
+                    tilemap = tilemap,
+                    tileX = obstacle.tileX,
+                    tileY = obstacle.tileY,
+                    depth = -1
+                })
             end
         end
 
-        self:createChild("CameraTarget", {
-            player = player
-        })
         self.camera.bounds = tilemap.rect
     end
 })

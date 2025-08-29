@@ -31,7 +31,7 @@ Nodes:define("Money", "Sprite", {
         self.props.timeOffset = math.random() * math.pi * 2
 
         self:createChild("Collider", {
-            shape = Rectangle.new(-2, -2, 4, 4)
+            shape = Rectangle.new(-3, -3, 6, 6)
         })
     end,
 
@@ -42,6 +42,7 @@ Nodes:define("Money", "Sprite", {
 
         if not player.props.dead then
             if self.collider:overlaps(player.collider) then
+                self.scene.props.results.moneyCollected = self.scene.props.results.moneyCollected + self.props.value
                 self:destroy()
             end
         end

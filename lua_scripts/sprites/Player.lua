@@ -95,7 +95,7 @@ Nodes:define("Player", "Sprite", {
                         anim = "idle"
                         self.collider.damping.x = 0.998
                         self.props.jumping = 0
-                        if Controls:isDown("up") then
+                        if self.func:allowControls() and Controls:isDown("up") then
                             self.collider.velocity.y = -300
                             self.props.jumping = 1
                             anim = "jumping"
@@ -112,11 +112,13 @@ Nodes:define("Player", "Sprite", {
 
                 local control = 0 -- for controlling left/right movement. Prevent moving if left and right are both pressed.
 
-                if Controls:isDown("left") then
-                    control = control - 120
-                end
-                if Controls:isDown("right") then
-                    control = control + 120
+                if self.func:allowControls() then
+                    if Controls:isDown("left") then
+                        control = control - 120
+                    end
+                    if Controls:isDown("right") then
+                        control = control + 120
+                    end
                 end
 
                 if control ~= 0 then
@@ -182,6 +184,22 @@ Nodes:define("Player", "Sprite", {
                 self.func:die(config)
             end
         end
+    end,
+    
+    allowControls = function(self, set)
+        if set ~= nil then
+            self.props.allowControls = set
+        end
+        if self.props.hurting then
+           return false
+        end
+        if self.scene.props.timer.props.finished then
+            return false
+        end
+        if not self.props.allowControls then
+            return false
+        end
+        return true
     end,
 
     die = function(self, config)
