@@ -35,8 +35,9 @@ Nodes:define("EndPost", "Sprite",  {
                 onComplete = function()
                     self.scene:createChild("StartSign", {
                         onComplete = function()
-                            self.scene.props.mentalMeter.func:changeValue(-15)
-                            local txt = self.scene.props.moneyNotif.func:show("-15")
+                            local loss = -15 - math.floor(GameData.day / 7)*2
+                            self.scene.props.mentalMeter.func:changeValue(loss)
+                            local txt = self.scene.props.moneyNotif.func:show(tostring(loss))
                             txt.color = "#a8ffff"
 
                             cameraTarget.func:startFollow()

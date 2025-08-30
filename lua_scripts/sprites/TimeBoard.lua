@@ -2,7 +2,7 @@ Nodes:define("TimeBoard", "Sprite", {
     texture = "timeBoard",
     origin = { 0.5, 0 },
     fixedToCamera = true,
-
+    
     props = {
         time = 60,
         counter = 0

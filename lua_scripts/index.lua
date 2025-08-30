@@ -57,6 +57,7 @@ Creator:createWorld({
         self.load:image("newDay_bg", "bg/newDay_bg.png")
         self.load:image("night_bg", "bg/night_bg.png")
         self.load:image("shop_bg", "bg/shop_bg.png")
+        self.load:image("familyTime_bg", "bg/familyTime_bg.png")
 
         self.load:spritesheet("shop_items", "sprites/shop_items.png", 48, 48)
 

@@ -16,6 +16,7 @@ Nodes:define("IntroScene", "Scene", {
         })
 
         self.props.dialogue = self:createChild("Dialogue", {
+            y = self.scene.camera.bottom - 48,
             onNext = function()
                 self.props.sm:nextEvt()
             end
@@ -58,10 +59,6 @@ Nodes:define("IntroScene", "Scene", {
             end)
         end
         self.props.sm:event()
-        if self.props.sm:event() then
-            if self.input.mouse.left.justPressed or Keyboard:isDown(Key.Space) then
-                self.props.sm:nextEvent()
-            end
-        end
+        self.props.dialogue.func:waitInput(self.props.sm)
     end
 })

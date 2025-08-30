@@ -1,6 +1,8 @@
 Nodes:load("scenes/Circus")
 Nodes:load("scenes/Shop")
 
+Nodes:load("scenes/FamilyTime")
+
 MapData = {
     maps = { "circus_map1", "circus_map2" },
     names = {
@@ -345,6 +347,17 @@ Nodes:define("ANewDay", "Scene", {
                 text = "Family Time",
                 onPress = function()
                     self.func:hideButtons()
+
+                    self:wait(0.8, function()
+                        self.scene:createChild("FillTransition", {
+                            next = {
+                                node = "FamilyTime"
+                            },
+                            fadeIn = 1,
+                            fadeOut = 1,
+                            interim = 1
+                        })
+                    end)
                 end
             })
             table.insert(self.props.buttons, button)
@@ -363,7 +376,7 @@ Nodes:define("ANewDay", "Scene", {
         self:wait(0.4, function()
             self:createChild("Text", {
                 font = "defaultFont",
-                y = self.world.bottom - 16,
+                y = self.world.bottom - 12,
                 text = "Rent: $ " .. GameData.rentAmount .. " (Due in " .. (GameData.rentDay - GameData.day) .. " days)",
                 alignment = Align.Center
             })
