@@ -134,6 +134,9 @@ Nodes:define("ANewDay", "Scene", {
                     self:wait(0.5, function()
                         self.func:createButtons()
                     end)
+                end,
+                skipCondition = function()
+                    return Keyboard:justPressed(Key.Space) or self.input.mouse.left.justPressed
                 end
             })
         end)

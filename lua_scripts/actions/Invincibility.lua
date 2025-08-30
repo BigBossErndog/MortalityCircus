@@ -5,8 +5,8 @@ Nodes:define("Invincibility", "PeriodicAction", {
         time = 1
     },
 
-    onPrepare = function(actor, self)
-        actor.props.invincible = true
+    onCreate = function(self)
+        self.parent.props.invincible = true
     end,
 
     onAct = function(actor, self, deltaTime)
@@ -18,6 +18,6 @@ Nodes:define("Invincibility", "PeriodicAction", {
     end,
 
     onComplete = function(actor, self)
-        actor.props.invincible = false
+        self.parent.props.invincible = false
     end
 })

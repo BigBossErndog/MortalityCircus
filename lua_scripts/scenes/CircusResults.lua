@@ -145,7 +145,7 @@ Nodes:define("CircusResults", "Scene", {
                             self:createChild("FillTransition", {
                                 next = {
                                     node = "GameOver",
-                                    props = GameOver.ranAway
+                                    props = GameOvers.ranAway
                                 },
                                 fadeIn = 2,
                                 fadeOut = 1,

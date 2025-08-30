@@ -4,15 +4,15 @@ GameOvers = {
         title = "A Huge Loss",
         desc = "You died while on the job, leaving your beloved family behind."
     },
-    gameOver_kickedOut = {
+    kickedOut = {
         image = "gameOver_kickedOut",
         title = "Onto The Streets",
         desc = "Unable to make rent, you and your family were made to."
     },
-    gameOver_ranAway = {
+    ranAway = {
         image = "gameOver_ranAway",
         title = "Life Abandoned",
-        desc = "Unable to take the pressure, you fled"
+        desc = "Unable to take the pressure, you fled from the life to tried to protect."
     }
 }
 
@@ -53,12 +53,11 @@ Nodes:define("GameOver", "Scene", {
                             rate = 10,
                             onComplete = function()
                                 self:wait(2, function()
-                                    GameData:new()
                                     self:createChild("FillTransition", {
                                         fadeIn = 2,
                                         fadeOut = 1,
                                         interim = 1,
-                                        next = "ANewDay"
+                                        next = "TitleScene"
                                     })
                                 end)
                             end

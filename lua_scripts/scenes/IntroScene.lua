@@ -37,7 +37,7 @@ Nodes:define("IntroScene", "Scene", {
         if self.props.sm:once() then
             self.props.dialogue.visible = false
             self.scene:createChild("FillTransition", {
-                next = "ANewDay",
+                next = "TitleScene",
                 fadeIn = 5,
                 fadeOut = 2,
                 interim = 1

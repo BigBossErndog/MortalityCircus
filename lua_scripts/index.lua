@@ -5,12 +5,13 @@ Nodes:load("sprites/Morti")
 Nodes:load("scenes/GameOver")
 Nodes:load("scenes/ANewDay")
 Nodes:load("scenes/IntroScene")
+Nodes:load("scenes/TitleScene")
 
 GameData = {
     new = function(self)
         self.day = 0
         self.health = 3
-        self.mentalHealth = 100
+        self.mentalHealth = 0
         self.money = 0
         self.day = 0
         self.bonusTime = 0
@@ -67,6 +68,8 @@ Creator:createWorld({
         self.load:image("gameOver_dead", "gameOver/gameOver_dead.png")
         self.load:image("gameOver_kickedOut", "gameOver/gameOver_kickedOut.png")
         self.load:image("gameOver_ranAway", "gameOver/gameOver_ranAway.png")
+
+        self.load:image("mortality_logo", "sprites/mortality_logo.png")
     end,
     
     onCreate = function(self)
