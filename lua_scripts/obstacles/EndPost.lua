@@ -35,6 +35,10 @@ Nodes:define("EndPost", "Sprite",  {
                 onComplete = function()
                     self.scene:createChild("StartSign", {
                         onComplete = function()
+                            self.scene.props.mentalMeter.func:changeValue(-15)
+                            local txt = self.scene.props.moneyNotif.func:show("-15")
+                            txt.color = "#a8ffff"
+
                             cameraTarget.func:startFollow()
                             self.scene.props.timer.func:start()
                             player.props.allowControls = true

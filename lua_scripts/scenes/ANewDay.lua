@@ -1,9 +1,22 @@
+Nodes:load("scenes/Circus")
+Nodes:load("scenes/Shop")
+
+MapData = {
+    maps = { "circus_map1", "circus_map2" },
+    names = {
+        ["circus_map1"] = "Livin' Da High Life",
+        ["circus_map2"] = "Bunny Hops"
+    },
+    days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" }
+}
+
 Nodes:define("BoardButton", "Sprite", {
     texture = "boardButton",
     scale = 0,
 
     props = {
-        icon = 0
+        icon = 0,
+        selected = false
     },
 
     input = {
@@ -12,16 +25,17 @@ Nodes:define("BoardButton", "Sprite", {
         onPointerDown = function(self)
             self.input:deactivate()
             self.props.txt.visible = false
+            self.props.selected = true
+
+            if self.func.onPress then
+                self.func:onPress()
+            end
 
             self.tween:to({
-                scale = 0,
-                duration = 0.3,
+                scale = 0.8,
+                duration = 0.15,
                 ease = Ease.BackIn,
-                onComplete = function()
-                    if self.func.onPress then
-                        self.func:onPress()
-                    end
-                end
+                yoyo = true
             })
         end
     },
@@ -63,12 +77,37 @@ Nodes:define("BoardButton", "Sprite", {
     end
 })
 
+Nodes:define("DayBoard", "Sprite", {
+    texture = "timeBoard",
+    origin = { 0.5, 0 },
+    fixedToCamera = true,
+
+    onCreate = function(self)
+        self.props.txt = self:createChild("Text", {
+            font = "defaultFont",
+            x = 1,
+            y = self.height / 2 - 2,
+            text = MapData.days[((GameData.day - 1) % 7) + 1] .. "\n" .. GameData.day,
+            alignment = Align.Center
+        })
+
+        self.y = self.world.top - self.height
+        
+        self.tween:to({
+            y = self.world.top,
+            duration = 1,
+            ease = Ease.SineOut
+        })
+    end
+})
+
 Nodes:define("ANewDay", "Scene", {
     onCreate = function(self)
-        self.props.maps = { "circus_map1", "circus_map2" }
+        GameData.day = GameData.day + 1
 
         local allowedMaps = {}
-        for i, v in ipairs(self.props.maps) do
+
+        for i, v in ipairs(MapData.maps) do
             if v ~= GameData.currentMap then
                 table.insert(allowedMaps, v)
             end
@@ -83,7 +122,7 @@ Nodes:define("ANewDay", "Scene", {
         local txt = self:createChild("Text", {
             font = "defaultFont",
             text = "It's a new day... What will you do?",
-            y = self.world.top + 32,
+            y = self.world.top + 40,
             progress = 0,
             visible = false
         })
@@ -98,52 +137,104 @@ Nodes:define("ANewDay", "Scene", {
                 end
             })
         end)
+
+        local healthBar = self:createChild("HealthBar", {
+            depth = 100,
+            health = GameData.health,
+            x = self.camera.left + 16,
+            y = self.camera.top + 16
+        })
+        self.props.healthBar = healthBar
+
+        self.props.mentalMeter = self:createChild("MentalMeter", {
+            depth = 100
+        })
+
+        self:createChild("DayBoard")
     end,
 
     hideButtons = function(self)
         for k, v in pairs(self.props.buttons) do
             v.input:deactivate()
+            if not v.props.selected then
+                v.visible = false
+            end
         end
     end,
 
     createButtons = function(self)
         self.props.buttons = {}
-
-        local button
         
-        button = self:createChild("BoardButton", {
+        local button1 = self:createChild("BoardButton", {
             x = -64,
+            y = 4,
             icon = 1,
             text = "Go To Work",
             onPress = function()
                 self.func:hideButtons()
-                self.scene:createChild("FillTransition", {
-                    next = {
-                        node = "Circus",
-                        tilemap = GameData.currentMap
-                    },
-                    fadeIn = 2,
-                    fadeOut = 2,
-                    interim = 1
-                })
+                self:wait(0.8, function()
+                    self.scene:createChild("FillTransition", {
+                        next = {
+                            node = "Circus",
+                            tilemap = GameData.currentMap
+                        },
+                        fadeIn = 2,
+                        fadeOut = 2,
+                        interim = 1
+                    })
+                end)
             end
         })
-        table.insert(self.props.buttons, button)
+        table.insert(self.props.buttons, button1)
 
-        self:wait(0.25, function()
-            button = self:createChild("BoardButton", {
+        self:createChild("Text", {
+            font = "defaultFont",
+            y = 56,
+            visible = false,
+            text = "Today's Show: " .. MapData.names[GameData.currentMap],
+            onUpdate = function(self)
+                self.visible = button1.props.txt.visible
+            end
+        })
+
+        self:wait(0.15, function()
+            local button = self:createChild("BoardButton", {
                 icon = 2,
+                y = 4,
                 text = "Go Shopping",
                 onPress = function()
                     self.func:hideButtons()
+
+                    self:wait(0.8, function()
+                        self.scene:createChild("FillTransition", {
+                            next = {
+                                node = "Shop"
+                            },
+                            fadeIn = 1,
+                            fadeOut = 1,
+                            interim = 1
+                        })
+                    end)
                 end
             })
             table.insert(self.props.buttons, button)
+
+            self:createChild("Text", {
+                font = "defaultFont",
+                y = 56,
+                visible = false,
+                color = Colors.Yellow,
+                text = "Bank Account: $ " .. GameData.money,
+                onUpdate = function(self)
+                    self.visible = button.props.txt.visible
+                end
+            })
         end)
 
-        self:wait(0.5, function()
-            button = self:createChild("BoardButton", {
+        self:wait(0.3, function()
+            local button = self:createChild("BoardButton", {
                 x = 64,
+                y = 4,
                 icon = 3,
                 text = "Family Time",
                 onPress = function()
@@ -151,6 +242,16 @@ Nodes:define("ANewDay", "Scene", {
                 end
             })
             table.insert(self.props.buttons, button)
+
+            self:createChild("Text", {
+                font = "defaultFont",
+                y = 56,
+                visible = false,
+                text = "Regain Mental Health",
+                onUpdate = function(self)
+                    self.visible = button.props.txt.visible
+                end
+            })
         end)
     end
 })

@@ -5,13 +5,17 @@ Nodes:define("HealthBar", "Group", {
         health = 3,
         hearts = {}
     },
+
+    onConfigure = function(self, config)
+        if config.health then
+            self.props.health = config.health
+        end
+    end,
     
     onCreate = function(self)
         local setHealth = self.props.health
         for i = 1, setHealth do
-            self:wait(0.2 * i, function()
-                self.func:addHeart(i)
-            end)
+            self.func:addHeart(i, setHealth)
         end
     end,
 
@@ -33,12 +37,20 @@ Nodes:define("HealthBar", "Group", {
         })
         self.props.hearts[self.props.health] = heart
 
-        heart.tween:to({
-            tint = Colors.Red,
-            duration = 0.5
-        })
+        if not setHealth then
+            heart.tween:to({
+                tint = Colors.Red,
+                duration = 0.5
+            })
+        else
+            heart.tint = Colors.Red
+        end
 
         return true
+    end,
+
+    recHealth = function(self)
+        GameData.health = self.props.health
     end,
 
     hurt = function(self)

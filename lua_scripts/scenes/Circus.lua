@@ -10,8 +10,10 @@ Nodes:load("obstacles/Heart")
 Nodes:load("obstacles/EndPost")
 
 Nodes:load("sprites/HealthBar")
+Nodes:load("sprites/MentalMeter")
 Nodes:load("sprites/TimeBoard")
 Nodes:load("sprites/EndSign")
+Nodes:load("sprites/MoneyNotif")
 
 Nodes:load("scenes/CircusResults")
 
@@ -46,9 +48,10 @@ Nodes:define("Circus", "Scene", {
         })
 
         self.props.timer = self:createChild("TimeBoard", {
-            time = self.props.time,
+            time = 60 + GameData.bonusTime,
             depth = 100
         })
+        GameData.bonusTime = 0
 
         local tilemap = self:createChild("Tilemap", {
             texture = "tiles",
@@ -56,14 +59,18 @@ Nodes:define("Circus", "Scene", {
             origin = 0.5
         })
         local floor = tilemap.children["floor"]
-        print(self.props.tilemap, tilemap.children.floor.tint)
 
         local healthBar = self:createChild("HealthBar", {
             depth = 100,
+            health = GameData.health,
             x = self.camera.left + 16,
             y = self.camera.top + 16
         })
         self.props.healthBar = healthBar
+
+        self.props.mentalMeter = self:createChild("MentalMeter", {
+            depth = 100
+        })
 
         local player = self:createChild("Player", {
             y = 28,
@@ -134,7 +141,8 @@ Nodes:define("Circus", "Scene", {
                     player = player,
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
-                    tileY = obstacle.tileY
+                    tileY = obstacle.tileY,
+                    depth = 1
                 })
             elseif obstacle.id == 5 then
                 local money = self:createChild("Money", {
@@ -150,7 +158,7 @@ Nodes:define("Circus", "Scene", {
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
                     tileY = obstacle.tileY,
-                    value = 20,
+                    value = 25,
                     frame = 7
                 })
             elseif obstacle.id == 15 then
@@ -159,7 +167,7 @@ Nodes:define("Circus", "Scene", {
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
                     tileY = obstacle.tileY,
-                    value = 50,
+                    value = 75,
                     frame = 16
                 })
             elseif obstacle.id == 7 then
@@ -179,6 +187,11 @@ Nodes:define("Circus", "Scene", {
                 })
             end
         end
+
+        self.props.moneyNotif = self:createChild("MoneyNotif", {
+            depth = 2,
+            player = player
+        })
 
         self.camera.bounds = tilemap.rect
     end

@@ -2,16 +2,20 @@ Nodes:load("ui/Borders")
 
 Nodes:load("sprites/Morti")
 
-Nodes:load("scenes/Circus")
 Nodes:load("scenes/GameOver")
 Nodes:load("scenes/ANewDay")
+Nodes:load("scenes/IntroScene")
 
 GameData = {
     new = function(self)
-        self.health = 2
+        self.day = 0
+        self.health = 3
+        self.mentalHealth = 100
         self.money = 0
         self.day = 0
+        self.bonusTime = 0
         self.currentMap = nil
+        self.doubleJump = false
     end
 }
 
@@ -49,6 +53,9 @@ Creator:createWorld({
         self.load:image("circus_bg", "bg/circus_bg.png")
         self.load:image("newDay_bg", "bg/newDay_bg.png")
         self.load:image("night_bg", "bg/night_bg.png")
+        self.load:image("shop_bg", "bg/shop_bg.png")
+
+        self.load:spritesheet("shop_items", "sprites/shop_items.png", 48, 48)
 
         self.load:image("timeBoard", "sprites/timeBoard.png")
         self.load:image("endSign", "sprites/endSign.png")
@@ -64,9 +71,9 @@ Creator:createWorld({
     
     onCreate = function(self)
         GameData:new()
+        math.randomseed(os.time())
 
-        self:createChild("ANewDay")
-        -- self:createChild("Circus")
+        self:createChild("IntroScene")
     end,
 
     onUpdate = function(self, deltaTime)

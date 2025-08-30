@@ -82,7 +82,7 @@ Nodes:define("CircusResults", "Scene", {
         end
 
         if self.props.notFinish then
-            self.func:createResult("Didn't Finish", -100, Colors.Red)
+            self.func:createResult("Didn't Finish", -200, Colors.Red)
         end
 
         if self.props.total < 0 then
@@ -126,20 +126,32 @@ Nodes:define("CircusResults", "Scene", {
                 props = {
                     value = newValue
                 },
-                duration = newValue * 0.005,
+                duration = newValue * 0.002,
                 onProgress = function()
                     bankAccount.props.valueTxt.text = "$ " .. math.floor(bankAccount.props.value)
                 end,
                 onComplete = function()
                     self:wait(2, function()
-                        self:createChild("FillTransition", {
-                            next = {
-                                node = "ANewDay"
-                            },
-                            fadeIn = 2,
-                            fadeOut = 1,
-                            interim = 1
-                        })
+                        if GameData.mentalHealth > 0 then
+                            self:createChild("FillTransition", {
+                                next = {
+                                    node = "ANewDay"
+                                },
+                                fadeIn = 2,
+                                fadeOut = 1,
+                                interim = 1
+                            })
+                        else
+                            self:createChild("FillTransition", {
+                                next = {
+                                    node = "GameOver",
+                                    props = GameOver.ranAway
+                                },
+                                fadeIn = 2,
+                                fadeOut = 1,
+                                interim = 1
+                            })
+                        end
                     end)
                 end
             })

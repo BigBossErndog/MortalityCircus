@@ -53,11 +53,12 @@ Nodes:define("GameOver", "Scene", {
                             rate = 10,
                             onComplete = function()
                                 self:wait(2, function()
+                                    GameData:new()
                                     self:createChild("FillTransition", {
                                         fadeIn = 2,
                                         fadeOut = 1,
                                         interim = 1,
-                                        next = "Circus"
+                                        next = "ANewDay"
                                     })
                                 end)
                             end
@@ -66,10 +67,6 @@ Nodes:define("GameOver", "Scene", {
                 end
             })
         end)
-    end,
-    
-    onUpdate = function(self, deltaTime)
-        
     end
 })
 

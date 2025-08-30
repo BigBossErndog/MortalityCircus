@@ -55,7 +55,6 @@ Nodes:define("FallingBlock", "Sprite", {
         self.props.falling = true
         local waitTime = self.props.hit and 0 or 0.25
         self:wait(0.25):next(function()
-            self:bringToFront()
             self.collider.acceleration.y = 800
             self.props.player.collider:removeCollisionTarget(self.collider)
 

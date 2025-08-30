@@ -44,6 +44,7 @@ Nodes:define("Money", "Sprite", {
             if self.collider:overlaps(player.collider) then
                 self.scene.props.results.moneyCollected = self.scene.props.results.moneyCollected + self.props.value
                 self:destroy()
+                self.scene.props.moneyNotif.func:show("$" .. self.props.value)
             end
         end
     end

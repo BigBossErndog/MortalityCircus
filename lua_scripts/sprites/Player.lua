@@ -5,7 +5,8 @@ Nodes:define("Player", "Sprite", {
     texture = "player",
 
     props = {
-        jumping = 0
+        jumping = 0,
+        restTime = 0
     },
 
     onPreload = function(self)
@@ -85,7 +86,7 @@ Nodes:define("Player", "Sprite", {
         damping = { 0.998, 0 }
     },
 
-    onUpdate = function(self)
+    onUpdate = function(self, deltaTime)
         if not self.props.dead then
             if not self.props.hurting then
                 local anim = nil
@@ -95,13 +96,31 @@ Nodes:define("Player", "Sprite", {
                         anim = "idle"
                         self.collider.damping.x = 0.998
                         self.props.jumping = 0
-                        if self.func:allowControls() and Controls:isDown("up") then
-                            self.collider.velocity.y = -300
-                            self.props.jumping = 1
-                            anim = "jumping"
+                        if self.func:allowControls() then
+                            if Controls:isDown("up") then
+                                self.props.restTime = -1
+                                self.collider.velocity.y = -300
+                                self.props.jumping = 1
+                                anim = "jumping"
+                            elseif GameData.mentalHealth < 100 and self.props.restTime ~= -1 then
+                                self.props.restTime = self.props.restTime + deltaTime
+                                if self.props.restTime >= 2.5 then
+                                    self.props.restTime = 0
+                                    self.scene.props.mentalMeter.func:changeValue(1)
+                                    local txt = self.scene.props.moneyNotif.func:show("+1")
+                                    txt.color = "#a8ffff"
+                                end
+                            end
                         end
-                    elseif self.props.jumping ~= 2 then
-                        self.props.jumping = 1
+                    else
+                        self.props.restTime = 0
+                        if GameData.doubleJump and Controls:justPressed("up") and self.props.jumping < 3 then
+                            self.props.jumping = 3
+                            self.collider.velocity.y = -300
+                            anim = "jumping"
+                        elseif self.props.jumping == 0 then
+                            self.props.jumping = 1
+                        end
                     end
                 else
                     self.props.bounced = false
@@ -122,6 +141,7 @@ Nodes:define("Player", "Sprite", {
                 end
 
                 if control ~= 0 then
+                    self.props.restTime = -1
                     if control < 0 then
                         self.scale.x = -1
                     end
@@ -133,13 +153,13 @@ Nodes:define("Player", "Sprite", {
                     end
                 end
 
-                if self.props.jumping == 1 then
+                if self.props.jumping == 1 or self.props.jumping == 3 then
                     if self.collider.velocity.y > 0 and self.props.jumping == 1 then
-                        self.props.jumping = 2
+                        self.props.jumping = (self.props.jumping == 1) and 2 or 4
                         anim = "falling"
                     end
                 end
-
+                
                 if control ~= 0 then
                     self.collider.velocity.x = control
                 end
@@ -177,9 +197,10 @@ Nodes:define("Player", "Sprite", {
                         end)
                     end
                 end
-                self:createChild("Invincibility", {
-
-                })
+                self.scene.props.mentalMeter.func:changeValue(-10)
+                local txt = self.scene.props.moneyNotif.func:show("-10")
+                txt.color = "#a8ffff"
+                self:createChild("Invincibility")
             else
                 self.func:die(config)
             end
