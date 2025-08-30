@@ -11,12 +11,14 @@ GameData = {
     new = function(self)
         self.day = 0
         self.health = 3
-        self.mentalHealth = 0
+        self.mentalHealth = 100
         self.money = 0
         self.day = 0
         self.bonusTime = 0
         self.currentMap = nil
         self.doubleJump = false
+        self.rentAmount = 1000
+        self.rentDay = 7
     end
 }
 

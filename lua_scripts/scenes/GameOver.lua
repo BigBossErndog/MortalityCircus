@@ -6,8 +6,8 @@ GameOvers = {
     },
     kickedOut = {
         image = "gameOver_kickedOut",
-        title = "Onto The Streets",
-        desc = "Unable to make rent, you and your family were made to."
+        title = "Kicked Out",
+        desc = "Unable to make rent, your family is made to wander the streets."
     },
     ranAway = {
         image = "gameOver_ranAway",

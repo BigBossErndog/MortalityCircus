@@ -105,6 +105,125 @@ Nodes:define("ANewDay", "Scene", {
     onCreate = function(self)
         GameData.day = GameData.day + 1
 
+        self:createChild("Sprite", {
+            texture = "newDay_bg"
+        })
+
+        local healthBar = self:createChild("HealthBar", {
+            depth = 100,
+            health = GameData.health,
+            x = self.camera.left + 16,
+            y = self.camera.top + 16
+        })
+        self.props.healthBar = healthBar
+
+        self.props.mentalMeter = self:createChild("MentalMeter", {
+            depth = 100
+        })
+
+        if GameData.day == GameData.rentDay then
+            self.func:payRent()
+        else
+            self.func:startDay()
+        end
+    end,
+
+    payRent = function(self)
+        local rentStuff = self:createChild("Group")
+
+        local txt = rentStuff:createChild("Text", {
+            font = "defaultFont",
+            text = "It's time to pay rent.",
+            y = self.world.top + 22,
+            progress = 0,
+            visible = false
+        })
+        
+        self:wait(1, function()
+            txt.visible = true
+            txt:autoProgress({
+                rate = 24,
+                onComplete = function()
+                    self:wait(1, function()
+                        local txt = rentStuff:createChild("Text", {
+                            font = "defaultFont",
+                            text = "Rent: $ " .. GameData.rentAmount,
+                            y = self.world.top + 40
+                        })
+
+                        self:wait(1, function()
+                            local txt = rentStuff:createChild("Text", {
+                                props = {
+                                    displayValue = GameData.money
+                                },
+                                font = "defaultFont",
+                                text = "Bank Account: $ " .. GameData.money,
+                                y = self.world.top + 54,
+                                color = Colors.Yellow
+                            })
+
+                            self:wait(2, function()
+                                if GameData.money >= GameData.rentAmount then
+                                    txt.tween:to({
+                                        props = {
+                                            displayValue = GameData.money - GameData.rentAmount
+                                        },
+                                        duration = 2,
+                                        rate = 24,
+                                        onProgress = function(t)
+                                            t.text = "Bank Account: $ " .. math.floor(t.props.displayValue)
+                                        end,
+                                        onComplete = function()
+                                            GameData.money = GameData.money - GameData.rentAmount
+                                            self:wait(0.5, function()
+                                                rentStuff.tween:to({
+                                                    alpha = 0,
+                                                    duration = 1,
+                                                    onComplete = function()
+                                                        rentStuff:destroy()
+                                                        self:wait(0.5, function()
+                                                            GameData.rentDay = GameData.rentDay + 7
+                                                            GameData.rentAmount = GameData.rentAmount + 200
+                                                            self.func:startDay()
+                                                        end)
+                                                    end
+                                                })
+                                            end)
+                                        end
+                                    })
+                                else
+                                    local txt = rentStuff:createChild("Text", {
+                                        font = "defaultFont",
+                                        text = "Not enough money...",
+                                        y = self.world.top + 70,
+                                        color = Colors.Red
+                                    })
+                                    self:wait(2, function()
+                                        self:createChild("FillTransition", {
+                                            next = {
+                                                node = "GameOver",
+                                                props = GameOvers.kickedOut
+                                            },
+                                            fadeIn = 2,
+                                            fadeOut = 1,
+                                            interim = 1
+                                        })
+                                    end)
+                                end
+                            end)
+
+                        end)
+
+                    end)
+                end,
+                skipCondition = function()
+                    return Keyboard:justPressed(Key.Space) or self.input.mouse.left.justPressed
+                end
+            })
+        end)
+    end,
+
+    startDay = function(self)
         local allowedMaps = {}
 
         for i, v in ipairs(MapData.maps) do
@@ -114,10 +233,6 @@ Nodes:define("ANewDay", "Scene", {
         end
 
         GameData.currentMap = allowedMaps[math.random(#allowedMaps)]
-
-        self:createChild("Sprite", {
-            texture = "newDay_bg"
-        })
 
         local txt = self:createChild("Text", {
             font = "defaultFont",
@@ -140,18 +255,6 @@ Nodes:define("ANewDay", "Scene", {
                 end
             })
         end)
-
-        local healthBar = self:createChild("HealthBar", {
-            depth = 100,
-            health = GameData.health,
-            x = self.camera.left + 16,
-            y = self.camera.top + 16
-        })
-        self.props.healthBar = healthBar
-
-        self.props.mentalMeter = self:createChild("MentalMeter", {
-            depth = 100
-        })
 
         self:createChild("DayBoard")
     end,
@@ -254,6 +357,15 @@ Nodes:define("ANewDay", "Scene", {
                 onUpdate = function(self)
                     self.visible = button.props.txt.visible
                 end
+            })
+        end)
+
+        self:wait(0.4, function()
+            self:createChild("Text", {
+                font = "defaultFont",
+                y = self.world.bottom - 16,
+                text = "Rent: $ " .. GameData.rentAmount .. " (Due in " .. (GameData.rentDay - GameData.day) .. " days)",
+                alignment = Align.Center
             })
         end)
     end
