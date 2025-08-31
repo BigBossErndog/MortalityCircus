@@ -4,10 +4,12 @@ Nodes:load("scenes/Shop")
 Nodes:load("scenes/FamilyTime")
 
 MapData = {
-    maps = { "circus_map1", "circus_map2" },
+    maps = { "circus_map1", "circus_map2", "circus_map3" },
     names = {
+        ["circus_map0"] = "On-The-Job Training",
         ["circus_map1"] = "Livin' Da High Life",
-        ["circus_map2"] = "Bunny Hops"
+        ["circus_map2"] = "Hop Bunny Hop",
+        ["circus_map3"] = "Descent Into Madness"
     },
     days = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" }
 }
@@ -25,6 +27,8 @@ Nodes:define("BoardButton", "Sprite", {
         active = true,
         cursor = Cursor.Pointer,
         onPointerDown = function(self)
+            self.audio:play("sfx/select")
+            
             self.input:deactivate()
             self.props.txt.visible = false
             self.props.selected = true
@@ -147,6 +151,7 @@ Nodes:define("ANewDay", "Scene", {
                 rate = 24,
                 onComplete = function()
                     self:wait(1, function()
+                        self.audio:play("sfx/slam")
                         local txt = rentStuff:createChild("Text", {
                             font = "defaultFont",
                             text = "Rent: $ " .. GameData.rentAmount,
@@ -154,6 +159,7 @@ Nodes:define("ANewDay", "Scene", {
                         })
 
                         self:wait(1, function()
+                            self.audio:play("sfx/slam")
                             local txt = rentStuff:createChild("Text", {
                                 props = {
                                     displayValue = GameData.money
@@ -173,11 +179,12 @@ Nodes:define("ANewDay", "Scene", {
                                         duration = 2,
                                         rate = 24,
                                         onProgress = function(t)
+                                            self.audio:play("sfx/coin_single")
                                             t.text = "Bank Account: $ " .. math.floor(t.props.displayValue)
                                         end,
                                         onComplete = function()
                                             GameData.money = GameData.money - GameData.rentAmount
-                                            self:wait(0.5, function()
+                                            self:wait(1, function()
                                                 rentStuff.tween:to({
                                                     alpha = 0,
                                                     duration = 1,
@@ -185,7 +192,7 @@ Nodes:define("ANewDay", "Scene", {
                                                         rentStuff:destroy()
                                                         self:wait(0.5, function()
                                                             GameData.rentDay = GameData.rentDay + 7
-                                                            GameData.rentAmount = GameData.rentAmount + 200
+                                                            GameData.rentAmount = math.round(GameData.rentAmount * 1.2)
                                                             self.func:startDay()
                                                         end)
                                                     end
@@ -200,7 +207,17 @@ Nodes:define("ANewDay", "Scene", {
                                         y = self.world.top + 70,
                                         color = Colors.Red
                                     })
+                                    
                                     self:wait(2, function()
+                                        self.audio:getChild("music").tween:to({
+                                            volume = 0,
+                                            duration = 2,
+                                            onComplete = function(music)
+                                                music:stop()
+                                                music.volume = 1
+                                            end
+                                        })
+
                                         self:createChild("FillTransition", {
                                             next = {
                                                 node = "GameOver",
@@ -228,13 +245,19 @@ Nodes:define("ANewDay", "Scene", {
     startDay = function(self)
         local allowedMaps = {}
 
-        for i, v in ipairs(MapData.maps) do
-            if v ~= GameData.currentMap then
-                table.insert(allowedMaps, v)
-            end
-        end
+        self.audio:play("music/cort")
 
-        GameData.currentMap = allowedMaps[math.random(#allowedMaps)]
+        if GameData.tutorialCompleted then
+            for i, v in ipairs(MapData.maps) do
+                if v ~= GameData.currentMap then
+                    table.insert(allowedMaps, v)
+                end
+            end
+
+            GameData.currentMap = allowedMaps[math.random(#allowedMaps)]
+        else
+            GameData.currentMap = "circus_map0"
+        end
 
         local txt = self:createChild("Text", {
             font = "defaultFont",
@@ -281,6 +304,14 @@ Nodes:define("ANewDay", "Scene", {
             onPress = function()
                 self.func:hideButtons()
                 self:wait(0.8, function()
+                    self.audio:getChild("music").tween:to({
+                        volume = 0,
+                        duration = 2,
+                        onComplete = function(music)
+                            music:stop()
+                            music.volume = 1
+                        end
+                    })
                     self.scene:createChild("FillTransition", {
                         next = {
                             node = "Circus",
@@ -299,7 +330,7 @@ Nodes:define("ANewDay", "Scene", {
             font = "defaultFont",
             y = 56,
             visible = false,
-            text = "Today's Show: " .. MapData.names[GameData.currentMap],
+            text = "Today's Show: ${color=\"cyan\"}" .. MapData.names[GameData.currentMap] .. "${end}",
             onUpdate = function(self)
                 self.visible = button1.props.txt.visible
             end
@@ -331,8 +362,7 @@ Nodes:define("ANewDay", "Scene", {
                 font = "defaultFont",
                 y = 56,
                 visible = false,
-                color = Colors.Yellow,
-                text = "Bank Account: $ " .. GameData.money,
+                text = "Go shopping for useful items. ${color=\"yellow\"}(Bank Account: $ " .. GameData.money .. ")${end}",
                 onUpdate = function(self)
                     self.visible = button.props.txt.visible
                 end
@@ -377,7 +407,7 @@ Nodes:define("ANewDay", "Scene", {
             self:createChild("Text", {
                 font = "defaultFont",
                 y = self.world.bottom - 12,
-                text = "Rent: $ " .. GameData.rentAmount .. " (Due in " .. (GameData.rentDay - GameData.day) .. " days)",
+                text = "Rent: $ " .. GameData.rentAmount .. " (Due in " .. (GameData.rentDay - GameData.day) .. " days) ${color=\"yellow\"}(Have: $ " .. GameData.money .. ")${end}",
                 alignment = Align.Center
             })
         end)
