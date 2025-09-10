@@ -1,5 +1,5 @@
 Nodes:define("Invincibility", "PeriodicAction", {
-    period = 0.1,
+    interim = 0.1,
 
     props = {
         time = 1
@@ -8,7 +8,7 @@ Nodes:define("Invincibility", "PeriodicAction", {
     onCreate = function(self)
         self.parent.props.invincible = true
     end,
-
+    
     onAct = function(actor, self, deltaTime)
         actor.visible = not actor.visible
 

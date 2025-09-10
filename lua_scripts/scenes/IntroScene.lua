@@ -40,7 +40,7 @@ Nodes:define("IntroScene", "Scene", {
             self.props.dialogue.visible = false
             self.scene:createChild("FillTransition", {
                 next = "TitleScene",
-                fadeIn = 5,
+                fadeIn = 4,
                 fadeOut = 2,
                 interim = 1
             })

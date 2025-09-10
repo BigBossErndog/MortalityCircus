@@ -156,7 +156,7 @@ Nodes:define("CircusResults", "Scene", {
                                         node = "GameOver",
                                         props = GameOvers.ranAway
                                     },
-                                    fadeIn = 2,
+                                    fadeIn = 1.5,
                                     fadeOut = 1,
                                     interim = 1
                                 })

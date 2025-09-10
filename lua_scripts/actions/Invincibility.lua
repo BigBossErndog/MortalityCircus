@@ -1,5 +1,5 @@
-Nodes:define("Invincibility", "PeriodicAction", {
-    period = 0.1,
+Nodes:define("Invincibility", "RepeatAction", {
+    interim = 0.1,
 
     props = {
         time = 1

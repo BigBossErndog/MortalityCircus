@@ -78,7 +78,7 @@ Nodes:define("Dialogue", "Group", {
         end
 
         if sm:event() then
-            if self.input.mouse.left.justPressed or Keyboard:isDown(Key.Space) then
+            if self.input.mouse.left.justPressed or Keyboard:justPressed(Key.Space) then
                 sm:nextEvent()
                 self.props.progressIcon.active = false
                 self.audio:play("sfx/select")

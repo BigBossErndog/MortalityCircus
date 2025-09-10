@@ -20,7 +20,7 @@ ShopData = {
     newKicks = {
         name = "New Kicks",
         desc = "Unlocks double jump.",
-        cost = 1000,
+        cost = 800,
         icon = 4
     },
     exit = {

@@ -15,12 +15,12 @@ Nodes:define("MoneyNotif", "NodePool", {
     end,
     
     show = function(self, displayText)
-        local txt = self:grab()
-
-        txt.pos = { self.props.player.x, self.props.player.y - 16 }
-        txt.text = displayText
-        txt.color = Colors.Yellow
-        txt.alpha = 1
+        local txt = self:grab({
+            pos = Vector2.new( self.props.player.x, self.props.player.y - 16 ),
+            text = displayText,
+            color = Colors.Yellow,
+            alpha = 1
+        })
 
         txt.tween:to({
             y = txt.pos.y - 8,
