@@ -43,7 +43,7 @@ Nodes:define("EndPost", "Sprite",  {
 
                             cameraTarget.get:startFollow()
                             self.scene.get.timer.get:start()
-                            player.get.allowControls = true
+                            player.get.controlsAllowed = true
                         end
                     })
                 end

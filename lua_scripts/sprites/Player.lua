@@ -200,7 +200,7 @@ Nodes:define("Player", "Sprite", {
     
     allowControls = function(self, set)
         if set ~= nil then
-            self.get.allowControls = set
+            self.get.controlsAllowed = set
         end
         if self.get.hurting then
            return false
@@ -208,7 +208,7 @@ Nodes:define("Player", "Sprite", {
         if self.scene.get.timer.get.finished then
             return false
         end
-        if not self.get.allowControls then
+        if not self.get.controlsAllowed then
             return false
         end
         return true
