@@ -44,7 +44,7 @@ Nodes:define("MoneyText", "Text", {
 
     showValue = function(self, value)
         self.text = "$ " .. math.round(value)
-        self.props.displayValue = value
+        self.get.displayValue = value
     end,
 
     changeValue = function(self, value)
@@ -55,7 +55,7 @@ Nodes:define("MoneyText", "Text", {
             },
             duration = math.abs(value) * 0.001,
             onProgress = function()
-                self.func:showValue(self.props.displayValue)
+                self.func:showValue(self.get.displayValue)
             end
         })
     end
@@ -80,19 +80,19 @@ Nodes:define("Shop", "Scene", {
             x = self.camera.left + 16,
             y = self.camera.top + 16
         })
-        self.props.healthBar = healthBar
+        self.get.healthBar = healthBar
 
-        self.props.mentalMeter = self:createChild("MentalMeter", {
+        self.get.mentalMeter = self:createChild("MentalMeter", {
             depth = 100
         })
 
-        self.props.moneyText = self:createChild("MoneyText", {
+        self.get.moneyText = self:createChild("MoneyText", {
             depth = 100,
             x = self.camera.left + 10,
             y = self.camera.top + 25
         })
 
-        self.props.itemDesc = self:createChild("Text", {
+        self.get.itemDesc = self:createChild("Text", {
             font = "defaultFont",
             visible = false,
             y = -36,
@@ -102,19 +102,19 @@ Nodes:define("Shop", "Scene", {
             show = function(self, txt)
                 self.text = txt
                 self.visible = true
-                self.props.shown = true
+                self.get.shown = true
             end,
             onUpdate = function(self)
-                if self.props.shown then
+                if self.get.shown then
                     self.visible = true
-                    self.props.shown = false
+                    self.get.shown = false
                 else
                     self.visible = false
                 end
             end
         })
 
-        self.props.notif = self:createChild("Text", {
+        self.get.notif = self:createChild("Text", {
             font = "defaultFont",
             text = "Not Enough Money",
             color = Colors.Red,
@@ -125,14 +125,14 @@ Nodes:define("Shop", "Scene", {
                 showTime = 0
             },
             show = function(self)
-                self.props.showTime = 1
+                self.get.showTime = 1
                 self.alpha = 1
                 self.color = Colors.Red
                 self.text = "Not Enough Money"
             end,
             onUpdate = function(self,deltaTime)
-                if self.props.showTime > 0 then
-                    self.props.showTime = self.props.showTime - deltaTime
+                if self.get.showTime > 0 then
+                    self.get.showTime = self.get.showTime - deltaTime
                 elseif self.alpha > 0 then
                     self.alpha = self.alpha - deltaTime*2
                     if self.alpha < 0 then
@@ -144,22 +144,22 @@ Nodes:define("Shop", "Scene", {
 
         self.func:createItem("painkillers", function()
             if GameData.health >= 5 then
-                self.props.notif.func:show()
-                self.props.notif.text = "Max Health Reached"
+                self.get.notif.func:show()
+                self.get.notif.text = "Max Health Reached"
             elseif self.func:purchase(ShopData.painkillers.cost) then
-                self.props.healthBar.func:addHeart()
-                GameData.health = self.props.healthBar.props.health
+                self.get.healthBar.func:addHeart()
+                GameData.health = self.get.healthBar.props.health
             end
         end)
         self.func:createItem("antidepressants", function()
             if GameData.mentalHealth < 100 then
                 if self.func:purchase(ShopData.antidepressants.cost) then
-                    self.props.mentalMeter.func:changeValue(15, true)
+                    self.get.mentalMeter.func:changeValue(15, true)
                 end
             else
-                self.props.notif.func:show()
-                self.props.notif.text = "Max Mental Health Reached"
-                self.props.notif.color = "#a8ffff"
+                self.get.notif.func:show()
+                self.get.notif.text = "Max Mental Health Reached"
+                self.get.notif.color = "#a8ffff"
             end
         end)
         self.func:createItem("caffeine", function()
@@ -194,10 +194,10 @@ Nodes:define("Shop", "Scene", {
 
     purchase = function(self, value)
         if GameData.money >= value then
-            self.props.moneyText.func:changeValue(-value)
+            self.get.moneyText.func:changeValue(-value)
             return true
         else
-            self.props.notif.func:show()
+            self.get.notif.func:show()
             return false
         end
     end,
@@ -207,42 +207,42 @@ Nodes:define("Shop", "Scene", {
             texture = "shop_items",
             frame = ShopData[key].icon,
             onPress = onPress,
-            x = self.props.startX + self.props.numItems * 64,
+            x = self.get.startX + self.get.numItems * 64,
             input = {
                 active = true,
                 cursor = Cursor.Pointer,
                 whilePointerHover = function()
                     if key == "exit" then
-                        self.props.itemDesc.func:show("Exit")
+                        self.get.itemDesc.func:show("Exit")
                     else
-                        self.props.itemDesc.func:show(
+                        self.get.itemDesc.func:show(
                             ShopData[key].name .. ": " .. ShopData[key].desc
                         )
                     end
                 end,
                 onPointerDown = function(self)
                     self.audio:play("sfx/select")
-                    if self.props.selected then
+                    if self.get.selected then
                         return
                     end
                     if self.func.onPress then
                         self.func:onPress()
                     end
                     self.scale = 1
-                    self.props.selected = true
+                    self.get.selected = true
                     self.tween:to({
                         scale = 0.8,
                         duration = 0.15,
                         ease = Ease.BackIn,
                         yoyo = true,
                         onComplete = function()
-                            self.props.selected = false
+                            self.get.selected = false
                         end
                     })
                 end
             }
         })
-        self.props.numItems = self.props.numItems + 1
+        self.get.numItems = self.get.numItems + 1
 
         if ShopData[key].cost then
             local lbl = self:createChild("Text", {

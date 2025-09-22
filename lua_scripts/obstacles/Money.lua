@@ -8,27 +8,27 @@ Nodes:define("Money", "Sprite", {
 
     onConfigure = function(self, config)
         if config.player then
-            self.props.player = config.player
+            self.get.player = config.player
         end
         if config.tilemap then
-            self.props.tilemap = config.tilemap
+            self.get.tilemap = config.tilemap
         end
 
         if config.tileX then
-            self.x = self.props.tilemap.left + (config.tileX + 0.5) * 16
+            self.x = self.get.tilemap.left + (config.tileX + 0.5) * 16
         end
         if config.tileY then
-            self.y = self.props.tilemap.top + (config.tileY + 0.5) * 16
+            self.y = self.get.tilemap.top + (config.tileY + 0.5) * 16
         end
 
         if config.value then
-            self.props.value = config.value
+            self.get.value = config.value
         end
     end,
 
     onCreate = function(self)
-        self.props.startY = self.y
-        self.props.timeOffset = math.random() * math.pi * 2
+        self.get.startY = self.y
+        self.get.timeOffset = math.random() * math.pi * 2
 
         self:createChild("Collider", {
             shape = Rectangle.new(-3, -3, 6, 6)
@@ -36,14 +36,14 @@ Nodes:define("Money", "Sprite", {
     end,
 
     onUpdate = function(self)
-        local player = self.props.player
+        local player = self.get.player
 
-        self.y = self.props.startY + math.sin(self.lifeTime * 2 + self.props.timeOffset) * 2
+        self.y = self.get.startY + math.sin(self.lifeTime * 2 + self.get.timeOffset) * 2
 
         if not player.props.dead then
             if self.collider:overlaps(player.collider) then
-                self.scene.props.results.moneyCollected = self.scene.props.results.moneyCollected + self.props.value
-                self.scene.props.moneyNotif.func:show("$" .. self.props.value)
+                self.scene.props.results.moneyCollected = self.scene.props.results.moneyCollected + self.get.value
+                self.scene.props.moneyNotif.func:show("$" .. self.get.value)
                 self.audio:play("sfx/coin")
                 self:destroy()
             end

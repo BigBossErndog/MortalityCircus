@@ -3,18 +3,18 @@ Nodes:define("Dialogue", "Group", {
 
     onConfigure = function(self, config)
         if config.talkSound then
-            self.props.talkSound = config.talkSound
+            self.get.talkSound = config.talkSound
         end
     end,
 
     onCreate = function(self)
-        self.props.backer = self:createChild("FillRect", {
+        self.get.backer = self:createChild("FillRect", {
             width = self.scene.camera.width,
             height = 24,
             color = Colors.Black
         })
 
-        self.props.text = self:createChild("Text", {
+        self.get.text = self:createChild("Text", {
             y = -1,
             font = "defaultFont",
             text = "Hello!",
@@ -23,7 +23,7 @@ Nodes:define("Dialogue", "Group", {
             alignment = Align.Center
         })
 
-        self.props.text:setManipulator("evil", function(index, lifeTime, char)
+        self.get.text:setManipulator("evil", function(index, lifeTime, char)
             return {
                 color = Colors.Red,
                 offsetX = (math.random() * 2 - 1)*0.5,
@@ -31,7 +31,7 @@ Nodes:define("Dialogue", "Group", {
             }
         end)
 
-        self.props.progressIcon = self:createChild("Sprite", {
+        self.get.progressIcon = self:createChild("Sprite", {
             texture = "tiles",
             frame = 19,
             active = false,
@@ -40,8 +40,8 @@ Nodes:define("Dialogue", "Group", {
                 count = 0
             },
             onUpdate = function(icon, deltaTime)
-                icon.x = self.props.backer.x + self.props.backer.width/2 - 4
-                icon.y = self.props.backer.y + self.props.backer.height/2 - 2
+                icon.x = self.get.backer.x + self.get.backer.width/2 - 4
+                icon.y = self.get.backer.y + self.get.backer.height/2 - 2
                 icon.props.count = icon.props.count + deltaTime
                 icon.z = (math.sin(icon.props.count * 20) - 1)
             end
@@ -50,11 +50,11 @@ Nodes:define("Dialogue", "Group", {
 
     say = function(self, txt, onFinish)
         self.visible = true
-        self.props.text.text = txt
-        self.props.backer.height = self.props.text.height + 4
+        self.get.text.text = txt
+        self.get.backer.height = self.get.text.height + 4
 
-        self.props.text.progress = 0
-        self.props.text:autoProgress({
+        self.get.text.progress = 0
+        self.get.text:autoProgress({
             rate = 16,
             onComplete = function()
                 if onFinish then
@@ -62,8 +62,8 @@ Nodes:define("Dialogue", "Group", {
                 end
             end,
             onCharacter = function()
-                if self.props.talkSound then
-                    self.audio:play(self.props.talkSound)
+                if self.get.talkSound then
+                    self.audio:play(self.get.talkSound)
                 end
             end,
             skipCondition = function()
@@ -74,13 +74,13 @@ Nodes:define("Dialogue", "Group", {
 
     waitInput = function(self, sm)
         if sm:once() then
-            self.props.progressIcon.active = true
+            self.get.progressIcon.active = true
         end
 
         if sm:event() then
             if self.input.mouse.left.justPressed or Keyboard:justPressed(Key.Space) then
                 sm:nextEvent()
-                self.props.progressIcon.active = false
+                self.get.progressIcon.active = false
                 self.audio:play("sfx/select")
             end
         end

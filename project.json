@@ -3,6 +3,12 @@
         "assets"
     ],
     "compile-code": false,
+    "encryption": {
+        "encrypt-files-assets": true,
+        "encrypt-lua-scripts": true,
+        "encrypt-write-output": true,
+        "key": "wooo"
+    },
     "executable-name": "MortalityCircus",
     "project-name": "MortalityCircus"
 }

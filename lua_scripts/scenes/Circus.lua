@@ -25,19 +25,19 @@ Nodes:define("Circus", "Scene", {
 
     onConfigure = function(self, config)
         if config.tilemap then
-            self.props.tilemap = config.tilemap
+            self.get.tilemap = config.tilemap
         end
     end,
 
     onCreate = function(self)
-        self.props.results = {
+        self.get.results = {
             moneyCollected = 0,
             notFinish = false,
             finished = false,
             heartsLeft = 0
         }
 
-        self.props.bg = self:createChild("Sprite", {
+        self.get.bg = self:createChild("Sprite", {
             fixedToCamera = true,
             texture = "circus_bg",
             depth = -100,
@@ -47,7 +47,7 @@ Nodes:define("Circus", "Scene", {
             end
         })
 
-        self.props.timer = self:createChild("TimeBoard", {
+        self.get.timer = self:createChild("TimeBoard", {
             time = 60 + GameData.bonusTime,
             depth = 100
         })
@@ -55,7 +55,7 @@ Nodes:define("Circus", "Scene", {
 
         local tilemap = self:createChild("Tilemap", {
             texture = "tiles",
-            tilemap = self.props.tilemap,
+            tilemap = self.get.tilemap,
             origin = 0.5
         })
         local floor = tilemap.children["floor"]
@@ -66,9 +66,9 @@ Nodes:define("Circus", "Scene", {
             x = self.camera.left + 16,
             y = self.camera.top + 16
         })
-        self.props.healthBar = healthBar
+        self.get.healthBar = healthBar
 
-        self.props.mentalMeter = self:createChild("MentalMeter", {
+        self.get.mentalMeter = self:createChild("MentalMeter", {
             depth = 100
         })
 
@@ -99,7 +99,7 @@ Nodes:define("Circus", "Scene", {
 
         local obstacles = tilemap.objects.obstacles
 
-        self.props.cameraTarget = self:createChild("CameraTarget", {
+        self.get.cameraTarget = self:createChild("CameraTarget", {
             player = player
         })
 
@@ -188,7 +188,7 @@ Nodes:define("Circus", "Scene", {
             end
         end
 
-        self.props.moneyNotif = self:createChild("MoneyNotif", {
+        self.get.moneyNotif = self:createChild("MoneyNotif", {
             depth = 2,
             player = player
         })

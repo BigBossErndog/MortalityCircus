@@ -20,7 +20,7 @@ Nodes:define("EndSign", "Sprite", {
         
         self:bringToFront()
 
-        if self.props.ending then
+        if self.get.ending then
             self.scene.props.healthBar.func:recHealth()
             self.audio:getChild("music").tween:to({
                 volume = 0,

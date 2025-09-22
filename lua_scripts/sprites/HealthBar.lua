@@ -8,12 +8,12 @@ Nodes:define("HealthBar", "Group", {
 
     onConfigure = function(self, config)
         if config.health then
-            self.props.health = config.health
+            self.get.health = config.health
         end
     end,
     
     onCreate = function(self)
-        local setHealth = self.props.health
+        local setHealth = self.get.health
         for i = 1, setHealth do
             self.func:addHeart(i, setHealth)
         end
@@ -21,10 +21,10 @@ Nodes:define("HealthBar", "Group", {
 
     addHeart = function(self, setHealth)
         if setHealth then
-            self.props.health = setHealth
+            self.get.health = setHealth
         else
-            if self.props.health < 5 then
-                self.props.health = self.props.health + 1
+            if self.get.health < 5 then
+                self.get.health = self.get.health + 1
             else
                 return false
             end
@@ -33,9 +33,9 @@ Nodes:define("HealthBar", "Group", {
         local heart = self:createChild("Sprite", {
             texture = "tiles",
             frame = 8,
-            x = (self.props.health - 1) * 16
+            x = (self.get.health - 1) * 16
         })
-        self.props.hearts[self.props.health] = heart
+        self.get.hearts[self.get.health] = heart
 
         if not setHealth then
             heart.tween:to({
@@ -50,15 +50,15 @@ Nodes:define("HealthBar", "Group", {
     end,
 
     recHealth = function(self)
-        GameData.health = self.props.health
+        GameData.health = self.get.health
     end,
 
     hurt = function(self)
-        if self.props.health <= 0 then
+        if self.get.health <= 0 then
             return true
         end
 
-        local heart = self.props.hearts[self.props.health]
+        local heart = self.get.hearts[self.get.health]
         heart.tween:to({
             y = heart.y + 8,
             alpha = 0,
@@ -70,13 +70,13 @@ Nodes:define("HealthBar", "Group", {
         })
 
 
-        self.props.health = self.props.health - 1
+        self.get.health = self.get.health - 1
 
-        return self.props.health <= 0
+        return self.get.health <= 0
     end,
 
     killAll = function(self)
-        while self.props.health > 0 do
+        while self.get.health > 0 do
             self.func:hurt()
         end
     end

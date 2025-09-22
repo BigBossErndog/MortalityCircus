@@ -10,12 +10,12 @@ Nodes:define("TimeBoard", "Sprite", {
 
     onConfigure = function(self, config)
         if config.time then
-            self.props.time = config.time
+            self.get.time = config.time
         end
     end,
 
     onCreate = function(self)
-        self.props.number = self:createChild("Text", {
+        self.get.number = self:createChild("Text", {
             font = "defaultFont",
             x = 1,
             y = self.height / 2 - 2,
@@ -30,26 +30,26 @@ Nodes:define("TimeBoard", "Sprite", {
             ease = Ease.SineOut
         })
 
-        self.props.counter = self.props.time
-        self.props.number.text = string.format("%.2f", self.props.counter)
+        self.get.counter = self.get.time
+        self.get.number.text = string.format("%.2f", self.get.counter)
     end,
 
     stop = function(self)
-        self.props.stopped = true
+        self.get.stopped = true
     end,
 
     start = function(self)
-        self.props.isCounting = true
-        self.props.number.color = Colors.White
+        self.get.isCounting = true
+        self.get.number.color = Colors.White
     end,
     
     onUpdate = function(self, deltaTime)
-        if self.props.isCounting and not self.props.stopped then
-            self.props.counter = self.props.counter - deltaTime
+        if self.get.isCounting and not self.get.stopped then
+            self.get.counter = self.get.counter - deltaTime
 
-            if self.props.counter <= 0 then
-                self.props.counter = 0
-                self.props.finished = true
+            if self.get.counter <= 0 then
+                self.get.counter = 0
+                self.get.finished = true
                 self.func:stop()
 
                 self.scene.props.results.notFinish = true
@@ -77,7 +77,7 @@ Nodes:define("TimeBoard", "Sprite", {
                 end)
             end
 
-            self.props.number.text = string.format("%.2f", self.props.counter)
+            self.get.number.text = string.format("%.2f", self.get.counter)
         end
     end
 })

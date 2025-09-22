@@ -11,7 +11,7 @@ Nodes:define("MentalMeter", "Sprite", {
         self.x = self.world.right - 16
         self.y = self.world.top + 16
 
-        self.props.num = self:createChild("Text", {
+        self.get.num = self:createChild("Text", {
             x = -12,
             origin = { 1, 0.5 },
             font = "defaultFont",
@@ -23,12 +23,12 @@ Nodes:define("MentalMeter", "Sprite", {
     showValue = function(self, value, pastMax)
         if value <= 0 then
             value = 0
-            self.props.num.color = Colors.Red
+            self.get.num.color = Colors.Red
         else
-            self.props.num.color = "#a8dfff"
+            self.get.num.color = "#a8dfff"
         end
-        self.props.displayValue = value
-        self.props.num.text = tostring(math.ceil(value))
+        self.get.displayValue = value
+        self.get.num.text = tostring(math.ceil(value))
     end,
 
     changeValue = function(self, value, pastMax)
@@ -52,7 +52,7 @@ Nodes:define("MentalMeter", "Sprite", {
             },
             duration = math.abs(value) * 0.01,
             onProgress = function()
-                self.func:showValue(self.props.displayValue)
+                self.func:showValue(self.get.displayValue)
             end
         })
     end

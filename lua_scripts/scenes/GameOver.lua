@@ -25,11 +25,11 @@ Nodes:define("GameOver", "Scene", {
 
     onCreate = function(self)
         self:createChild("Sprite", {
-            texture = self.props.image
+            texture = self.get.image
         })
 
         local titleTxt = self:createChild("Text", {
-            text = self.props.title,
+            text = self.get.title,
             font = "defaultFont",
             y = 38,
             progress = 0
@@ -42,7 +42,7 @@ Nodes:define("GameOver", "Scene", {
         })
 
         local descTxt = self:createChild("Text", {
-            text = self.props.desc,
+            text = self.get.desc,
             font = "defaultFont",
             y = titleTxt.y + 22,
             wrapMode = WrapMode.ByWord,

@@ -1,7 +1,7 @@
 Nodes:define("CameraTarget", "Node", {
     onConfigure = function(self, config)
         if config.player then
-            self.props.player = config.player
+            self.get.player = config.player
         end
     end,
 
@@ -15,12 +15,12 @@ Nodes:define("CameraTarget", "Node", {
     end,
     
     updatePosition = function(self)
-        if Controls:isDown("down") and self.props.player.collider:hasCollided(Direction.Down) then
-            self.x = self.props.player.x
-            self.y = self.props.player.y + 48
+        if Controls:isDown("down") and self.get.player.collider:hasCollided(Direction.Down) then
+            self.x = self.get.player.x
+            self.y = self.get.player.y + 48
         else
-            self.x = self.props.player.x
-            self.y = self.props.player.y
+            self.x = self.get.player.x
+            self.y = self.get.player.y
         end
     end,
 

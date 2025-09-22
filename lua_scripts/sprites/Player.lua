@@ -55,10 +55,10 @@ Nodes:define("Player", "Sprite", {
 
     onConfigure = function(self, config)
         if config.tilemap then
-            self.props.tilemap = config.tilemap
+            self.get.tilemap = config.tilemap
         end
         if config.healthBar then
-            self.props.healthBar = config.healthBar
+            self.get.healthBar = config.healthBar
         end
     end,
 
@@ -86,35 +86,35 @@ Nodes:define("Player", "Sprite", {
     },
 
     onUpdate = function(self, deltaTime)
-        if not self.props.dead then
-            if not self.props.hurting then
+        if not self.get.dead then
+            if not self.get.hurting then
                 local anim = nil
                 
-                if not self.props.bounced then
+                if not self.get.bounced then
                     if self.collider:hasCollided(Direction.Down) then
                         anim = "idle"
                         self.collider.damping.x = 0.998
-                        self.props.jumping = 0
+                        self.get.jumping = 0
                         if self.func:allowControls() then
                             if Controls:isDown("up") then
                                 self.collider.velocity.y = -300
-                                self.props.jumping = 1
+                                self.get.jumping = 1
                                 anim = "jumping"
                                 self.audio:play("sfx/jump")
                             end
                         end
                     else
-                        if GameData.doubleJump and Controls:justPressed("up") and self.props.jumping < 3 then
-                            self.props.jumping = 3
+                        if GameData.doubleJump and Controls:justPressed("up") and self.get.jumping < 3 then
+                            self.get.jumping = 3
                             self.collider.velocity.y = -300
                             anim = "jumping"
                             self.audio:play("sfx/jump")
-                        elseif self.props.jumping == 0 then
-                            self.props.jumping = 1
+                        elseif self.get.jumping == 0 then
+                            self.get.jumping = 1
                         end
                     end
                 else
-                    self.props.bounced = false
+                    self.get.bounced = false
                     if self.collider:hasCollided(Direction.Down) then
                         self.collider.damping.x = 0.998
                     end
@@ -138,14 +138,14 @@ Nodes:define("Player", "Sprite", {
                     if control > 0 then
                         self.scale.x = 1
                     end
-                    if self.props.jumping == 0 then
+                    if self.get.jumping == 0 then
                         anim = "run"
                     end
                 end
 
-                if self.props.jumping == 1 or self.props.jumping == 3 then
-                    if self.collider.velocity.y > 0 and self.props.jumping == 1 then
-                        self.props.jumping = (self.props.jumping == 1) and 2 or 4
+                if self.get.jumping == 1 or self.get.jumping == 3 then
+                    if self.collider.velocity.y > 0 and self.get.jumping == 1 then
+                        self.get.jumping = (self.get.jumping == 1) and 2 or 4
                         anim = "falling"
                     end
                 end
@@ -159,7 +159,7 @@ Nodes:define("Player", "Sprite", {
                 end
             end
 
-            if (self.y > self.props.tilemap.bottom) and (not self.scene.props.timer.finished)  then
+            if (self.y > self.get.tilemap.bottom) and (not self.scene.props.timer.finished)  then
                 self.func:die({
                     epicenter = {
                         x = self.x - self.collider.velocity.x * 0.02,
@@ -173,17 +173,17 @@ Nodes:define("Player", "Sprite", {
     end,
 
     hurt = function(self, config)
-        if (not self.props.invincible) and (not self.props.dead) then
-            if not self.props.healthBar.func:hurt() then
-                if (not self.props.hurting) and config then
+        if (not self.get.invincible) and (not self.get.dead) then
+            if not self.get.healthBar.func:hurt() then
+                if (not self.get.hurting) and config then
                     if config.epicenter then
                         self.collider.velocity.x = (self.x - config.epicenter.x) * 4
                         self.collider.velocity.y = (self.y - config.epicenter.y) * 4
-                        self.props.hurting = true
+                        self.get.hurting = true
                         self.animation = "hurting"
                         self.collider.damping.x = 0
                         self:wait(0.4):next(function()
-                            self.props.hurting = false
+                            self.get.hurting = false
                         end)
                     end
                 end
@@ -200,25 +200,25 @@ Nodes:define("Player", "Sprite", {
     
     allowControls = function(self, set)
         if set ~= nil then
-            self.props.allowControls = set
+            self.get.allowControls = set
         end
-        if self.props.hurting then
+        if self.get.hurting then
            return false
         end
         if self.scene.props.timer.props.finished then
             return false
         end
-        if not self.props.allowControls then
+        if not self.get.allowControls then
             return false
         end
         return true
     end,
 
     die = function(self, config)
-        if self.props.dead then
+        if self.get.dead then
             return
         end
-        self.props.dead = true
+        self.get.dead = true
         self.animation = "dead"
         self.collider.targets = nil
 
@@ -233,7 +233,7 @@ Nodes:define("Player", "Sprite", {
             end
         end
 
-        self.props.healthBar.func:killAll()
+        self.get.healthBar.func:killAll()
 
         self.scene.camera:stopFollow()
 

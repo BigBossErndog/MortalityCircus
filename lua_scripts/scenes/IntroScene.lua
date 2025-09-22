@@ -2,32 +2,32 @@ Nodes:load("sprites/Dialogue")
 
 Nodes:define("IntroScene", "Scene", {
     onCreate = function(self)
-        self.props.sm = self:createChild("StateMachine")
+        self.get.sm = self:createChild("StateMachine")
 
-        self.props.morti = self:createChild("Morti")
+        self.get.morti = self:createChild("Morti")
 
-        self.props.overlay = self:createChild("FillRect", {
+        self.get.overlay = self:createChild("FillRect", {
             color = Colors.Black
         })
-        self.props.overlay.rect = self.camera.rect
-        self.props.overlay.tween:to({
+        self.get.overlay.rect = self.camera.rect
+        self.get.overlay.tween:to({
             alpha = 0,
             duration = 2
         })
 
-        self.props.dialogue = self:createChild("Dialogue", {
+        self.get.dialogue = self:createChild("Dialogue", {
             y = self.scene.camera.bottom - 48,
             talkSound = "sfx/talk",
             onNext = function()
-                self.props.sm:nextEvt()
+                self.get.sm:nextEvt()
             end
         })
     end,
 
     onUpdate = function(self)
-        self.props.sm:start()
+        self.get.sm:start()
 
-        self.props.sm:wait(2)
+        self.get.sm:wait(2)
         self.func:say("Ah, our new freelance clown!", "talk", "smile")
         self.func:say("I'm ${yellow}Morti${end}, and welcome to ${yellow}Morti's Circus${end}!", "talk", "smile")
         self.func:say("Here, we perform death-defying stunts for the amusement of all!", "talk", "smile")
@@ -36,8 +36,8 @@ Nodes:define("IntroScene", "Scene", {
         self.func:say("But hey, I hear ya got a family.", "talk", "smile")
         self.func:say("So you better work hard for their sake!\n${evil}HAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHA${end}", "laugh")
 
-        if self.props.sm:once() then
-            self.props.dialogue.visible = false
+        if self.get.sm:once() then
+            self.get.dialogue.visible = false
             self.scene:createChild("FillTransition", {
                 next = "TitleScene",
                 fadeIn = 4,
@@ -48,18 +48,18 @@ Nodes:define("IntroScene", "Scene", {
     end,
 
     say = function(self, txt, mortiAnim, mortiEndAnim)
-        if self.props.sm:once() then
+        if self.get.sm:once() then
             if mortiAnim then
-                self.props.morti.animation = mortiAnim
+                self.get.morti.animation = mortiAnim
             end
-            self.props.dialogue.func:say(txt, function()
+            self.get.dialogue.func:say(txt, function()
                 if mortiEndAnim then
-                    self.props.morti.animation = mortiEndAnim
+                    self.get.morti.animation = mortiEndAnim
                 end
-                self.props.sm:nextEvent()
+                self.get.sm:nextEvent()
             end)
         end
-        self.props.sm:event()
-        self.props.dialogue.func:waitInput(self.props.sm)
+        self.get.sm:event()
+        self.get.dialogue.func:waitInput(self.get.sm)
     end
 })

@@ -1,7 +1,7 @@
 Nodes:define("MoneyNotif", "NodePool", {
     onConfigure = function(self, config)
         if config.player then
-            self.props.player = config.player
+            self.get.player = config.player
         end
     end,
 
@@ -16,7 +16,7 @@ Nodes:define("MoneyNotif", "NodePool", {
     
     show = function(self, displayText)
         local txt = self:grab({
-            pos = Vector2.new( self.props.player.x, self.props.player.y - 16 ),
+            pos = Vector2.new( self.get.player.x, self.get.player.y - 16 ),
             text = displayText,
             color = Colors.Yellow,
             alpha = 1

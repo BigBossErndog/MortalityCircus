@@ -5,16 +5,16 @@ Nodes:define("EndPost", "Sprite",  {
 
     onConfigure = function(self, config)
         if config.player then
-            self.props.player = config.player
+            self.get.player = config.player
         end
         if config.tilemap then
-            self.props.tilemap = config.tilemap
+            self.get.tilemap = config.tilemap
         end
         if config.tileX then
-            self.x = self.props.tilemap.left + (config.tileX + 0.5) * 16
+            self.x = self.get.tilemap.left + (config.tileX + 0.5) * 16
         end
         if config.tileY then
-            self.y = self.props.tilemap.top + (config.tileY + 1) * 16
+            self.y = self.get.tilemap.top + (config.tileY + 1) * 16
         end
     end,
 
@@ -26,7 +26,7 @@ Nodes:define("EndPost", "Sprite",  {
         self.scene.camera:focusOn(self)
         
         local cameraTarget = self.scene.props.cameraTarget
-        local player = self.props.player
+        local player = self.get.player
         self:wait(1, function()
             self.audio:play("music/alma-espanola")
             self.scene.camera.tween:to({
@@ -52,7 +52,7 @@ Nodes:define("EndPost", "Sprite",  {
     end,
 
     onUpdate = function(self)
-        local player = self.props.player
+        local player = self.get.player
         
         if (not player.props.dead) and (not self.scene.props.timer.props.finished) then
             if self.collider:overlaps(player.collider) and player.collider:hasCollided(Direction.Down) then

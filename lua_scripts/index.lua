@@ -75,11 +75,13 @@ Creator:createWorld({
         self.load:image("gameOver_ranAway", "gameOver/gameOver_ranAway.png")
 
         self.load:image("mortality_logo", "sprites/mortality_logo.png")
-
+        print("load audio")
         self.load:audio("alma-espanola", "audio/alma-espanola-366582.mp3")
+        print("1")
         self.load:audio("cort", "audio/cort_circocomica1_dm-290837.mp3")
-
+        print("wav")
         self.load:audio("jump", "audio/jump.wav")
+        print("done")
         self.load:audio("spring_sound", "audio/spring.wav")
         self.load:audio("coin", "audio/coin.wav")
         self.load:audio("lose", "audio/lose.wav")
@@ -89,6 +91,7 @@ Creator:createWorld({
         self.load:audio("talk", "audio/talk.wav")
         self.load:audio("slam", "audio/slam.wav")
         self.load:audio("drop", "audio/drop.wav")
+        print("finish")
     end,
     
     onCreate = function(self)

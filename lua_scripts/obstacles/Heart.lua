@@ -5,23 +5,23 @@ Nodes:define("Heart", "Sprite", {
 
     onConfigure = function(self, config)
         if config.player then
-            self.props.player = config.player
+            self.get.player = config.player
         end
         if config.tilemap then
-            self.props.tilemap = config.tilemap
+            self.get.tilemap = config.tilemap
         end
 
         if config.tileX then
-            self.x  = self.props.tilemap.left + (config.tileX + 0.5) * 16
+            self.x  = self.get.tilemap.left + (config.tileX + 0.5) * 16
         end
         if config.tileY then
-            self.y  = self.props.tilemap.top + (config.tileY + 0.5) * 16
+            self.y  = self.get.tilemap.top + (config.tileY + 0.5) * 16
         end
     end,
 
     onCreate = function(self)
-        self.props.timeOffset = math.random() * math.pi * 2
-        self.props.startY = self.y
+        self.get.timeOffset = math.random() * math.pi * 2
+        self.get.startY = self.y
 
         self:createChild("Collider", {
             shape = Vector2.new(0, 0)
@@ -29,9 +29,9 @@ Nodes:define("Heart", "Sprite", {
     end,
 
     onUpdate = function(self)
-        local player = self.props.player
+        local player = self.get.player
 
-        self.y = self.props.startY + math.sin((self.lifeTime + self.props.timeOffset) * 2)*2 - 2
+        self.y = self.get.startY + math.sin((self.lifeTime + self.get.timeOffset) * 2)*2 - 2
 
         if not player.props.dead then
             if self.collider:overlaps(player.collider) then

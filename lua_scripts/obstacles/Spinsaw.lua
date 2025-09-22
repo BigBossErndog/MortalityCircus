@@ -3,49 +3,49 @@ Nodes:define("Spinsaw", "Sprite", {
 
     onConfigure = function(self, config)
         if config.player then
-            self.props.player = config.player
+            self.get.player = config.player
         end
         if config.tilemap then
-            self.props.tilemap = config.tilemap
+            self.get.tilemap = config.tilemap
         end
         if config.tileX then
-            self.x = self.props.tilemap.left + (config.tileX + 0.5) * 16
+            self.x = self.get.tilemap.left + (config.tileX + 0.5) * 16
         end
         if config.tileY then
-            self.y = self.props.tilemap.top + (config.tileY + 1) * 16
+            self.y = self.get.tilemap.top + (config.tileY + 1) * 16
         end
         if config.targetX then
-            self.props.targetX = self.props.tilemap.left + (config.targetX + 0.5) * 16
+            self.get.targetX = self.get.tilemap.left + (config.targetX + 0.5) * 16
         end
         if config.targetY then
-            self.props.targetY = self.props.tilemap.top + (config.targetY + 1) * 16
+            self.get.targetY = self.get.tilemap.top + (config.targetY + 1) * 16
         end
         if config.startX then
-            self.props.startX = self.props.tilemap.left + (config.startX + 0.5) * 16
+            self.get.startX = self.get.tilemap.left + (config.startX + 0.5) * 16
         end
         if config.startY then
-            self.props.startY = self.props.tilemap.top + (config.startY + 1) * 16
+            self.get.startY = self.get.tilemap.top + (config.startY + 1) * 16
         end
         if config.travelTime then
-            self.props.travelTime = config.travelTime
+            self.get.travelTime = config.travelTime
         end
     end,
 
     onCreate = function(self)
-        if not self.props.targetX then
-            self.props.targetX = self.x
+        if not self.get.targetX then
+            self.get.targetX = self.x
         end
-        if not self.props.targetY then
-            self.props.targetY = self.y
+        if not self.get.targetY then
+            self.get.targetY = self.y
         end
-        if not self.props.startX then
-            self.props.startX = self.x
+        if not self.get.startX then
+            self.get.startX = self.x
         end
-        if not self.props.startY then
-            self.props.startY = self.y
+        if not self.get.startY then
+            self.get.startY = self.y
         end
-        if not self.props.travelTime then
-            self.props.travelTime = 2
+        if not self.get.travelTime then
+            self.get.travelTime = 2
         end
 
         self:createChild("Collider", {
@@ -53,9 +53,9 @@ Nodes:define("Spinsaw", "Sprite", {
         })
 
         self.tween:to({
-            x = self.props.targetX,
-            y = self.props.targetY,
-            duration = self.props.travelTime,
+            x = self.get.targetX,
+            y = self.get.targetY,
+            duration = self.get.travelTime,
             ease = Ease.SineInOut,
             yoyo = true,
             repeats = -1,
@@ -68,9 +68,9 @@ Nodes:define("Spinsaw", "Sprite", {
     onUpdate = function(self)
         self.rotation = self.rotation + 0.5
         self.tint = Colors.White
-        if self.props.player and (not self.props.player.props.dead) and (not self.scene.props.timer.props.finished) then
-            if self.collider:overlaps(self.props.player.collider) then
-                self.props.player.func:hurt({
+        if self.get.player and (not self.get.player.props.dead) and (not self.scene.props.timer.props.finished) then
+            if self.collider:overlaps(self.get.player.collider) then
+                self.get.player.func:hurt({
                     epicenter = self.pos
                 })
             end

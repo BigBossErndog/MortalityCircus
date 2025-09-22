@@ -1,13 +1,13 @@
 Nodes:define("ResultItem", "Group", {
     onConfigure = function(self, config)
         if config.name then
-            self.props.name = config.name
+            self.get.name = config.name
         end
         if config.value then
-            self.props.value = config.value
+            self.get.value = config.value
         end
         if config.color then
-            self.props.color = config.color
+            self.get.color = config.color
         end
     end,
     
@@ -18,23 +18,23 @@ Nodes:define("ResultItem", "Group", {
             origin = { 0, 0.5 },
             x = -64,
             font = "defaultFont",
-            text = self.props.name
+            text = self.get.name
         })
-        if self.props.color then
-            txt.color = self.props.color
+        if self.get.color then
+            txt.color = self.get.color
         end
-        self.props.nameTxt = txt
+        self.get.nameTxt = txt
 
         txt = self:createChild("Text", {
             origin = { 1, 0.5 },
             x = 64,
             font = "defaultFont",
-            text = "$ " .. self.props.value
+            text = "$ " .. self.get.value
         })
-        if self.props.color then
-            txt.color = self.props.color
+        if self.get.color then
+            txt.color = self.get.color
         end
-        self.props.valueTxt = txt
+        self.get.valueTxt = txt
     end
 })
 
@@ -55,16 +55,16 @@ Nodes:define("CircusResults", "Scene", {
             value = val,
             color = color
         })
-        result.y = -64 + self.props.resultCount * 20
+        result.y = -64 + self.get.resultCount * 20
 
-        self.props.total = self.props.total + val
+        self.get.total = self.get.total + val
 
-        result:wait(2.5 + 1 * self.props.resultCount, function()
+        result:wait(2.5 + 1 * self.get.resultCount, function()
             self.audio:play("sfx/slam")
             result.visible = true
         end)
 
-        self.props.resultCount = self.props.resultCount + 1
+        self.get.resultCount = self.get.resultCount + 1
     end,
 
     onCreate = function(self)
@@ -76,22 +76,22 @@ Nodes:define("CircusResults", "Scene", {
             GameData.tutorialCompleted = true
         end
 
-        self.func:createResult("Money Collected", self.props.moneyCollected)
+        self.func:createResult("Money Collected", self.get.moneyCollected)
         
-        if self.props.heartsLeft > 0 then
-            self.func:createResult("Hearts Left", self.props.heartsLeft * 25)
+        if self.get.heartsLeft > 0 then
+            self.func:createResult("Hearts Left", self.get.heartsLeft * 25)
         end
 
-        if self.props.finished then
+        if self.get.finished then
             self.func:createResult("Finished", 50, Colors.Green)
         end
 
-        if self.props.notFinish then
+        if self.get.notFinish then
             self.func:createResult("Didn't Finish", -200, Colors.Red)
         end
 
-        if self.props.total < 0 then
-            self.props.total = 0
+        if self.get.total < 0 then
+            self.get.total = 0
         end
 
         local totalResult = self:createChild("ResultItem", {
@@ -100,19 +100,19 @@ Nodes:define("CircusResults", "Scene", {
             color = Colors.Yellow,
 
             name = "Total",
-            value = self.props.total
+            value = self.get.total
         })
 
-        totalResult.y = -64 + self.props.resultCount * 20 + 8
+        totalResult.y = -64 + self.get.resultCount * 20 + 8
 
-        totalResult:wait(2.5 + 1 * self.props.resultCount, function()
+        totalResult:wait(2.5 + 1 * self.get.resultCount, function()
             self.audio:play("sfx/slam")
             totalResult.visible = true
         end)
 
         local oldValue = GameData.money
 
-        GameData.money = GameData.money + self.props.total
+        GameData.money = GameData.money + self.get.total
         
         local newValue = GameData.money
 
@@ -124,9 +124,9 @@ Nodes:define("CircusResults", "Scene", {
             name = "Bank Account",
             value = oldValue
         })
-        bankAccount.y = -64 + (self.props.resultCount + 1) * 20 + 8
+        bankAccount.y = -64 + (self.get.resultCount + 1) * 20 + 8
 
-        bankAccount:wait(2.5 + 1 * self.props.resultCount + 1, function()
+        bankAccount:wait(2.5 + 1 * self.get.resultCount + 1, function()
             self.audio:play("sfx/slam")
             bankAccount.visible = true
             self:wait(1, function()

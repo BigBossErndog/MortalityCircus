@@ -1,17 +1,1 @@
-Nodes:define("Borders", "Group", {
-    onCreate = function(self)
-        self:createChild("FillRect", {
-            color = Colors.Black,
-            origin = 0,
-            x = self.world.left, y = self.world.top,
-            width = self.world.width, height = 32,
-        })
-
-        self:createChild("FillRect", {
-            color = Colors.Black,
-            origin = { 0, 1 },
-            x = self.world.left, y = self.world.bottom,
-            width = self.world.width, height = 32,
-        })
-    end
-})
+_amara_encrypted_OQALCgRVCwoRBgEKX00tAAULCh0ETUNPVSgdAAIfTUNXFGJlV09PTxgBLB0SDhsKV1JPCQIBDBseAAFHBAoDCV5iZU9XT09PV09PHBIDCVUUHQoOAwosBx4DC0dVKQYDGz0KDANNQ08MYmVPV09PT1dPT09XT08MGAMAHVdSTywYAwAdBEEtAxYMBEN6ZU9PV09PT1dPT09XTwAdHggGAVdST19bYmVPV09PT1dPT09XT08XV1JPHBIDCUEAAB0DE0EDChEbQ08OT1JPBAoDCVkYAB0bC0EbGB9DYn1PT09XT09PV09PT1cYBgsDB09SVxwKAxFBGAAFAwtBAAYLGx9DTwcSBggHA09ST0RdQ2J9T09PV09PT1cSRmJ9YmVPV09PT1dPTxwSAwlVFB0KDgMKLAceAwtHVSkGAxs9CgwDTUNPDGJlT1dPT09XT09PV09PDBgDAB1XUk8sGAMAHQRBLQMWDARDemVPT1dPT09XT09PV08AHR4IBgFXUk8UV19DT0ZPEkN6ZU9PV09PT1dPT09XTxdPSk8cChsJQRgYHQMLWQMKCQNDTxZXUk8cEgMJQQAAHQMTQQ0AAxsAAltiZU9XT09PV09PT1dPTxgeCxsHV1JPHBIDCUEAAB0DE0EYBhMbB0NXBwoGEAcbT0pPXF1bYmVPV09PT1dPTxJeYmVPV09PChkLYmUKRg==

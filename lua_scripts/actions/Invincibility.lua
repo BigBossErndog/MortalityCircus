@@ -12,7 +12,7 @@ Nodes:define("Invincibility", "RepeatAction", {
     onAct = function(actor, self, deltaTime)
         actor.visible = not actor.visible
 
-        if actor.visible and (self.lifeTime >= self.props.time) then
+        if actor.visible and (self.lifeTime >= self.get.time) then
             self:complete()
         end
     end,

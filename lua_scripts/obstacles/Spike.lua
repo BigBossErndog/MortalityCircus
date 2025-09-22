@@ -5,7 +5,7 @@ Nodes:define("Spike", "Sprite", {
 
     onConfigure = function(self, config)
         if config.player then
-            self.props.player = config.player
+            self.get.player = config.player
         end
 
         if config.tileX then
@@ -27,8 +27,8 @@ Nodes:define("Spike", "Sprite", {
     end,
 
     onUpdate = function(self)
-        if self.collider:overlaps(self.props.player.collider) then
-            self.props.player.func:hurt({
+        if self.collider:overlaps(self.get.player.collider) then
+            self.get.player.func:hurt({
                 cause = self,
                 epicenter = self.pos + Vector2.new(8, 16)
             })

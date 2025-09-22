@@ -10,74 +10,74 @@ Nodes:define("FallingBlock", "Sprite", {
 
     onConfigure = function(self, config)
         if config.player then
-            self.props.player = config.player
+            self.get.player = config.player
         end
         if config.tilemap then
-            self.props.tilemap = config.tilemap
+            self.get.tilemap = config.tilemap
         end
         if config.tileX then
-            self.x = self.props.tilemap.left + config.tileX * 16
+            self.x = self.get.tilemap.left + config.tileX * 16
         end
         if config.tileY then
-            self.y = self.props.tilemap.top + config.tileY * 16
+            self.y = self.get.tilemap.top + config.tileY * 16
         end
     end,
 
     onCreate = function(self)
-        self.props.startX = self.x
-        self.props.startY = self.y
+        self.get.startX = self.x
+        self.get.startY = self.y
 
         self:createChild("Collider")
-        if self.props.player then
-            self.props.player.collider:addCollisionTarget(self)
+        if self.get.player then
+            self.get.player.collider:addCollisionTarget(self)
         end
     end,
 
     onUpdate = function(self)
-        if (not self.props.falling) and (not self.props.player.props.dead) and (not self.scene.props.timer.props.finished) then
-            self.y = self.props.startY - 1
-            if self.collider:overlaps(self.props.player.collider) then
+        if (not self.get.falling) and (not self.get.player.props.dead) and (not self.scene.props.timer.props.finished) then
+            self.y = self.get.startY - 1
+            if self.collider:overlaps(self.get.player.collider) then
                 self.func:fall()
             else
-                self.y = self.props.startY + 1
-                if self.collider:overlaps(self.props.player.collider) then
-                    self.props.hit = true
-                    self.collider.velocity.x = (self.x - self.props.player.x)
+                self.y = self.get.startY + 1
+                if self.collider:overlaps(self.get.player.collider) then
+                    self.get.hit = true
+                    self.collider.velocity.x = (self.x - self.get.player.x)
                     self.collider.velocity.y = -50 - math.random() * 50
                     self.func:fall()
                 end
             end
-            self.y = self.props.startY
+            self.y = self.get.startY
         end
     end,
 
     fall = function(self)
-        self.props.falling = true
-        local waitTime = self.props.hit and 0 or 0.25
+        self.get.falling = true
+        local waitTime = self.get.hit and 0 or 0.25
         self:wait(0.25):next(function()
             self.collider.acceleration.y = 800
-            self.props.player.collider:removeCollisionTarget(self.collider)
+            self.get.player.collider:removeCollisionTarget(self.collider)
             self.audio:play("sfx/drop")
             
             local waiter = self:wait(3, function()
                 self.collider.acceleration.y = 0
                 self.collider.velocity = 0
-                self.pos = { self.props.startX, self.props.startY + 4}
+                self.pos = { self.get.startX, self.get.startY + 4}
                 
-                self.props.hit = false
+                self.get.hit = false
                 self.rotation = 0
 
                 self.alpha = 0
                 self.tween:to({
                     alpha = 1,
                     duration = 0.5,
-                    y = self.props.startY,
+                    y = self.get.startY,
                     onComplete = function()
                         self:createChild("Action", {
                             onAct = function(actor, action)
-                                if not self.collider:overlaps(self.props.player.collider) then
-                                    self.props.player.collider:addCollisionTarget(self.collider)
-                                    self.props.falling = false
+                                if not self.collider:overlaps(self.get.player.collider) then
+                                    self.get.player.collider:addCollisionTarget(self.collider)
+                                    self.get.falling = false
                                     action:complete()
                                 end
                             end
@@ -87,7 +87,7 @@ Nodes:define("FallingBlock", "Sprite", {
             end)
 
             waiter.func.onUpdate = function()
-                if self.props.hit then
+                if self.get.hit then
                     self.rotation = self.rotation + self.collider.velocity.x
                 end
             end

@@ -30,8 +30,8 @@ Nodes:define("BoardButton", "Sprite", {
             self.audio:play("sfx/select")
             
             self.input:deactivate()
-            self.props.txt.visible = false
-            self.props.selected = true
+            self.get.txt.visible = false
+            self.get.selected = true
 
             if self.func.onPress then
                 self.func:onPress()
@@ -53,17 +53,17 @@ Nodes:define("BoardButton", "Sprite", {
 
     onConfigure = function(self, config)
         if config.icon then
-            self.props.icon = config.icon
+            self.get.icon = config.icon
         end
         if config.text then
-            self.props.text = config.text
+            self.get.text = config.text
         end
     end,
 
     onCreate = function(self)
-        self.props.icon = self:createChild("Sprite", {
+        self.get.icon = self:createChild("Sprite", {
             texture = "dayIcons",
-            frame = self.props.icon
+            frame = self.get.icon
         })
         self.tween:to({
             scale = 1,
@@ -71,15 +71,15 @@ Nodes:define("BoardButton", "Sprite", {
             ease = Ease.BackOut
         })
 
-        self.props.txt = self:createChild("Text", {
+        self.get.txt = self:createChild("Text", {
             y = -32,
             font = "defaultFont",
-            text = self.props.text
+            text = self.get.text
         })
     end,
 
     onUpdate = function(self)
-        self.props.txt.visible = self.input.hovered
+        self.get.txt.visible = self.input.hovered
     end
 })
 
@@ -89,7 +89,7 @@ Nodes:define("DayBoard", "Sprite", {
     fixedToCamera = true,
 
     onCreate = function(self)
-        self.props.txt = self:createChild("Text", {
+        self.get.txt = self:createChild("Text", {
             font = "defaultFont",
             x = 1,
             y = self.height / 2 - 2,
@@ -121,9 +121,9 @@ Nodes:define("ANewDay", "Scene", {
             x = self.camera.left + 16,
             y = self.camera.top + 16
         })
-        self.props.healthBar = healthBar
+        self.get.healthBar = healthBar
 
-        self.props.mentalMeter = self:createChild("MentalMeter", {
+        self.get.mentalMeter = self:createChild("MentalMeter", {
             depth = 100
         })
 
@@ -285,7 +285,7 @@ Nodes:define("ANewDay", "Scene", {
     end,
 
     hideButtons = function(self)
-        for k, v in pairs(self.props.buttons) do
+        for k, v in pairs(self.get.buttons) do
             v.input:deactivate()
             if not v.props.selected then
                 v.visible = false
@@ -294,7 +294,7 @@ Nodes:define("ANewDay", "Scene", {
     end,
 
     createButtons = function(self)
-        self.props.buttons = {}
+        self.get.buttons = {}
         
         local button1 = self:createChild("BoardButton", {
             x = -64,
@@ -324,7 +324,7 @@ Nodes:define("ANewDay", "Scene", {
                 end)
             end
         })
-        table.insert(self.props.buttons, button1)
+        table.insert(self.get.buttons, button1)
 
         self:createChild("Text", {
             font = "defaultFont",
@@ -356,7 +356,7 @@ Nodes:define("ANewDay", "Scene", {
                     end)
                 end
             })
-            table.insert(self.props.buttons, button)
+            table.insert(self.get.buttons, button)
 
             self:createChild("Text", {
                 font = "defaultFont",
@@ -390,7 +390,7 @@ Nodes:define("ANewDay", "Scene", {
                     end)
                 end
             })
-            table.insert(self.props.buttons, button)
+            table.insert(self.get.buttons, button)
 
             self:createChild("Text", {
                 font = "defaultFont",
