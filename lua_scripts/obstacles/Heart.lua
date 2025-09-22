@@ -33,9 +33,9 @@ Nodes:define("Heart", "Sprite", {
 
         self.y = self.get.startY + math.sin((self.lifeTime + self.get.timeOffset) * 2)*2 - 2
 
-        if not player.props.dead then
+        if not player.get.dead then
             if self.collider:overlaps(player.collider) then
-                if player.props.healthBar.func:addHeart() then
+                if player.get.healthBar.get:addHeart() then
                     self.audio:play("sfx/heart")
                     self:destroy()
                 end

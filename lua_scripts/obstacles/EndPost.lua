@@ -25,7 +25,7 @@ Nodes:define("EndPost", "Sprite",  {
 
         self.scene.camera:focusOn(self)
         
-        local cameraTarget = self.scene.props.cameraTarget
+        local cameraTarget = self.scene.get.cameraTarget
         local player = self.get.player
         self:wait(1, function()
             self.audio:play("music/alma-espanola")
@@ -37,13 +37,13 @@ Nodes:define("EndPost", "Sprite",  {
                     self.scene:createChild("StartSign", {
                         onComplete = function()
                             local loss = -15 - math.floor(GameData.day / 7)*5
-                            self.scene.props.mentalMeter.func:changeValue(loss)
-                            local txt = self.scene.props.moneyNotif.func:show(tostring(loss))
+                            self.scene.get.mentalMeter.get:changeValue(loss)
+                            local txt = self.scene.get.moneyNotif.get:show(tostring(loss))
                             txt.color = "#a8ffff"
 
-                            cameraTarget.func:startFollow()
-                            self.scene.props.timer.func:start()
-                            player.props.allowControls = true
+                            cameraTarget.get:startFollow()
+                            self.scene.get.timer.get:start()
+                            player.get.allowControls = true
                         end
                     })
                 end
@@ -54,13 +54,13 @@ Nodes:define("EndPost", "Sprite",  {
     onUpdate = function(self)
         local player = self.get.player
         
-        if (not player.props.dead) and (not self.scene.props.timer.props.finished) then
+        if (not player.get.dead) and (not self.scene.get.timer.get.finished) then
             if self.collider:overlaps(player.collider) and player.collider:hasCollided(Direction.Down) then
-                local timer = self.scene.props.timer
-                timer.func:stop()
-                timer.props.finished = true
+                local timer = self.scene.get.timer
+                timer.get:stop()
+                timer.get.finished = true
 
-                self.scene.props.results.finished = true
+                self.scene.get.results.finished = true
 
                 self.scene:createChild("EndSign", {
                     onComplete = function()
@@ -70,7 +70,7 @@ Nodes:define("EndPost", "Sprite",  {
                             interim = 1,
                             next = {
                                 node = "CircusResults",
-                                props = self.scene.props.results
+                                props = self.scene.get.results
                             }
                         })
                     end

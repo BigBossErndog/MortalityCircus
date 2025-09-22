@@ -61,18 +61,18 @@ Nodes:define("FamilyTime", "Scene", {
 
         for i = 1, #self.get.event do
             if self.get.sm:once() then
-                self.get.dialogue.func:say(self.get.event[i], function()
+                self.get.dialogue.get:say(self.get.event[i], function()
                     self.get.sm:nextEvent()
                 end)
             end
             self.get.sm:event()
-            self.get.dialogue.func:waitInput(self.get.sm)
+            self.get.dialogue.get:waitInput(self.get.sm)
         end
         if self.get.sm:once() then
-            self.get.mentalMeter.func:changeValue(self.get.gain)
-            self.get.dialogue.props.text.color = "#a8dfff"
+            self.get.mentalMeter.get:changeValue(self.get.gain)
+            self.get.dialogue.get.text.color = "#a8dfff"
         end
-        self.func:say(self.get.gainText)
+        self.get:say(self.get.gainText)
         if self.get.sm:once() then
             self:createChild("FillTransition", {
                 fadeIn = 2,
@@ -88,7 +88,7 @@ Nodes:define("FamilyTime", "Scene", {
             if mortiAnim then
                 self.get.morti.animation = mortiAnim
             end
-            self.get.dialogue.func:say(txt, function()
+            self.get.dialogue.get:say(txt, function()
                 if mortiEndAnim then
                     self.get.morti.animation = mortiEndAnim
                 end
@@ -96,6 +96,6 @@ Nodes:define("FamilyTime", "Scene", {
             end)
         end
         self.get.sm:event()
-        self.get.dialogue.func:waitInput(self.get.sm)
+        self.get.dialogue.get:waitInput(self.get.sm)
     end
 })

@@ -12,10 +12,10 @@ Nodes:define("TitleScene", "Scene", {
                 flickerCounter = 0
             },
             onUpdate = function(starter, deltaTime)
-                starter.props.flickerCounter = starter.props.flickerCounter + deltaTime
-                if starter.props.flickerCounter >= 0.5 then
+                starter.get.flickerCounter = starter.get.flickerCounter + deltaTime
+                if starter.get.flickerCounter >= 0.5 then
                     starter.visible = not starter.visible
-                    starter.props.flickerCounter = 0
+                    starter.get.flickerCounter = 0
                 end
                 if self.input.mouse.left.justPressed or Keyboard:justPressed(Key.Space) then
                     GameData:new()

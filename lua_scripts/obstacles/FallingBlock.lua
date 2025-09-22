@@ -34,17 +34,17 @@ Nodes:define("FallingBlock", "Sprite", {
     end,
 
     onUpdate = function(self)
-        if (not self.get.falling) and (not self.get.player.props.dead) and (not self.scene.props.timer.props.finished) then
+        if (not self.get.falling) and (not self.get.player.get.dead) and (not self.scene.get.timer.get.finished) then
             self.y = self.get.startY - 1
             if self.collider:overlaps(self.get.player.collider) then
-                self.func:fall()
+                self.get:fall()
             else
                 self.y = self.get.startY + 1
                 if self.collider:overlaps(self.get.player.collider) then
                     self.get.hit = true
                     self.collider.velocity.x = (self.x - self.get.player.x)
                     self.collider.velocity.y = -50 - math.random() * 50
-                    self.func:fall()
+                    self.get:fall()
                 end
             end
             self.y = self.get.startY
@@ -86,7 +86,7 @@ Nodes:define("FallingBlock", "Sprite", {
                 })
             end)
 
-            waiter.func.onUpdate = function()
+            waiter.get.onUpdate = function()
                 if self.get.hit then
                     self.rotation = self.rotation + self.collider.velocity.x
                 end

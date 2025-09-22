@@ -33,8 +33,8 @@ Nodes:define("BoardButton", "Sprite", {
             self.get.txt.visible = false
             self.get.selected = true
 
-            if self.func.onPress then
-                self.func:onPress()
+            if self.get.onPress then
+                self.get:onPress()
             end
 
             self.tween:to({
@@ -128,9 +128,9 @@ Nodes:define("ANewDay", "Scene", {
         })
 
         if GameData.day == GameData.rentDay then
-            self.func:payRent()
+            self.get:payRent()
         else
-            self.func:startDay()
+            self.get:startDay()
         end
     end,
 
@@ -180,7 +180,7 @@ Nodes:define("ANewDay", "Scene", {
                                         rate = 24,
                                         onProgress = function(t)
                                             self.audio:play("sfx/coin_single")
-                                            t.text = "Bank Account: $ " .. math.floor(t.props.displayValue)
+                                            t.text = "Bank Account: $ " .. math.floor(t.get.displayValue)
                                         end,
                                         onComplete = function()
                                             GameData.money = GameData.money - GameData.rentAmount
@@ -193,7 +193,7 @@ Nodes:define("ANewDay", "Scene", {
                                                         self:wait(0.5, function()
                                                             GameData.rentDay = GameData.rentDay + 7
                                                             GameData.rentAmount = math.round(GameData.rentAmount * 1.2)
-                                                            self.func:startDay()
+                                                            self.get:startDay()
                                                         end)
                                                     end
                                                 })
@@ -272,7 +272,7 @@ Nodes:define("ANewDay", "Scene", {
                 rate = 24,
                 onComplete = function()
                     self:wait(0.5, function()
-                        self.func:createButtons()
+                        self.get:createButtons()
                     end)
                 end,
                 skipCondition = function()
@@ -287,7 +287,7 @@ Nodes:define("ANewDay", "Scene", {
     hideButtons = function(self)
         for k, v in pairs(self.get.buttons) do
             v.input:deactivate()
-            if not v.props.selected then
+            if not v.get.selected then
                 v.visible = false
             end
         end
@@ -302,7 +302,7 @@ Nodes:define("ANewDay", "Scene", {
             icon = 1,
             text = "Go To Work",
             onPress = function()
-                self.func:hideButtons()
+                self.get:hideButtons()
                 self:wait(0.8, function()
                     self.audio:getChild("music").tween:to({
                         volume = 0,
@@ -332,7 +332,7 @@ Nodes:define("ANewDay", "Scene", {
             visible = false,
             text = "Today's Show: ${color=\"cyan\"}" .. MapData.names[GameData.currentMap] .. "${end}",
             onUpdate = function(self)
-                self.visible = button1.props.txt.visible
+                self.visible = button1.get.txt.visible
             end
         })
 
@@ -342,7 +342,7 @@ Nodes:define("ANewDay", "Scene", {
                 y = 4,
                 text = "Go Shopping",
                 onPress = function()
-                    self.func:hideButtons()
+                    self.get:hideButtons()
 
                     self:wait(0.8, function()
                         self.scene:createChild("FillTransition", {
@@ -364,7 +364,7 @@ Nodes:define("ANewDay", "Scene", {
                 visible = false,
                 text = "Go shopping for useful items. ${color=\"yellow\"}(Bank Account: $ " .. GameData.money .. ")${end}",
                 onUpdate = function(self)
-                    self.visible = button.props.txt.visible
+                    self.visible = button.get.txt.visible
                 end
             })
         end)
@@ -376,7 +376,7 @@ Nodes:define("ANewDay", "Scene", {
                 icon = 3,
                 text = "Family Time",
                 onPress = function()
-                    self.func:hideButtons()
+                    self.get:hideButtons()
 
                     self:wait(0.8, function()
                         self.scene:createChild("FillTransition", {
@@ -398,7 +398,7 @@ Nodes:define("ANewDay", "Scene", {
                 visible = false,
                 text = "Regain Mental Health",
                 onUpdate = function(self)
-                    self.visible = button.props.txt.visible
+                    self.visible = button.get.txt.visible
                 end
             })
         end)

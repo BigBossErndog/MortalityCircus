@@ -6,7 +6,7 @@ Nodes:define("Invincibility", "RepeatAction", {
     },
 
     onCreate = function(self)
-        self.parent.props.invincible = true
+        self.parent.get.invincible = true
     end,
 
     onAct = function(actor, self, deltaTime)
@@ -18,6 +18,6 @@ Nodes:define("Invincibility", "RepeatAction", {
     end,
 
     onComplete = function(actor, self)
-        self.parent.props.invincible = false
+        self.parent.get.invincible = false
     end
 })

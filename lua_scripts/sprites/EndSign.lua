@@ -8,7 +8,7 @@ Nodes:define("EndSign", "Sprite", {
 
     onConfigure = function(self, config)
         if config.onComplete then
-            self.func.onComplete = config.onComplete
+            self.get.onComplete = config.onComplete
         end
     end,
 
@@ -16,12 +16,12 @@ Nodes:define("EndSign", "Sprite", {
         self.x = self.world.left - self.width/2
         self.y = 32
 
-        self.scene.props.results.heartsLeft = self.scene.props.healthBar.props.health
+        self.scene.get.results.heartsLeft = self.scene.get.healthBar.get.health
         
         self:bringToFront()
 
         if self.get.ending then
-            self.scene.props.healthBar.func:recHealth()
+            self.scene.get.healthBar.get:recHealth()
             self.audio:getChild("music").tween:to({
                 volume = 0,
                 duration = 2,
@@ -43,8 +43,8 @@ Nodes:define("EndSign", "Sprite", {
                         duration = 0.5,
                         ease = Ease.SineIn,
                         onComplete = function()
-                            if self.func.onComplete then
-                                self.func.onComplete()
+                            if self.get.onComplete then
+                                self.get.onComplete()
                             end
                         end
                     })

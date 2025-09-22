@@ -42,8 +42,8 @@ Nodes:define("Dialogue", "Group", {
             onUpdate = function(icon, deltaTime)
                 icon.x = self.get.backer.x + self.get.backer.width/2 - 4
                 icon.y = self.get.backer.y + self.get.backer.height/2 - 2
-                icon.props.count = icon.props.count + deltaTime
-                icon.z = (math.sin(icon.props.count * 20) - 1)
+                icon.get.count = icon.get.count + deltaTime
+                icon.z = (math.sin(icon.get.count * 20) - 1)
             end
         })
     end,

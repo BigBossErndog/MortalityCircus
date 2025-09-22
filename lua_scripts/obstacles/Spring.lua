@@ -37,7 +37,7 @@ Nodes:define("Spring", "Sprite", {
         local player = self.get.player
 
         self.cropTop = self.get.pad.y + 16 + 1
-        if self.get.state == 1 and player.func:allowControls() and not player.props.dead then
+        if self.get.state == 1 and player.get:allowControls() and not player.get.dead then
             if self.collider:overlaps(player.collider) then
                 self.get.state = 2
 
@@ -48,8 +48,8 @@ Nodes:define("Spring", "Sprite", {
                 end
 
                 player.collider.velocity.y = -450
-                player.props.jumping = 1
-                player.props.bounced = true
+                player.get.jumping = 1
+                player.get.bounced = true
                 player.animation = "jumping"
 
                 self.get.pad.tween:to({

@@ -50,9 +50,9 @@ Nodes:define("TimeBoard", "Sprite", {
             if self.get.counter <= 0 then
                 self.get.counter = 0
                 self.get.finished = true
-                self.func:stop()
+                self.get:stop()
 
-                self.scene.props.results.notFinish = true
+                self.scene.get.results.notFinish = true
 
                 self:wait(1, function()
                     self.scene:createChild("EndSign", {
@@ -63,7 +63,7 @@ Nodes:define("TimeBoard", "Sprite", {
                                 interim = 1,
                                 next = {
                                     node = "CircusResults",
-                                    props = self.scene.props.results
+                                    props = self.scene.get.results
                                 }
                             })
                         end

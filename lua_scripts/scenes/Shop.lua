@@ -39,7 +39,7 @@ Nodes:define("MoneyText", "Text", {
     },
 
     onCreate = function(self)
-        self.func:showValue(GameData.money)
+        self.get:showValue(GameData.money)
     end,
 
     showValue = function(self, value)
@@ -55,7 +55,7 @@ Nodes:define("MoneyText", "Text", {
             },
             duration = math.abs(value) * 0.001,
             onProgress = function()
-                self.func:showValue(self.get.displayValue)
+                self.get:showValue(self.get.displayValue)
             end
         })
     end
@@ -142,42 +142,42 @@ Nodes:define("Shop", "Scene", {
             end
         })
 
-        self.func:createItem("painkillers", function()
+        self.get:createItem("painkillers", function()
             if GameData.health >= 5 then
-                self.get.notif.func:show()
+                self.get.notif.get:show()
                 self.get.notif.text = "Max Health Reached"
-            elseif self.func:purchase(ShopData.painkillers.cost) then
-                self.get.healthBar.func:addHeart()
-                GameData.health = self.get.healthBar.props.health
+            elseif self.get:purchase(ShopData.painkillers.cost) then
+                self.get.healthBar.get:addHeart()
+                GameData.health = self.get.healthBar.get.health
             end
         end)
-        self.func:createItem("antidepressants", function()
+        self.get:createItem("antidepressants", function()
             if GameData.mentalHealth < 100 then
-                if self.func:purchase(ShopData.antidepressants.cost) then
-                    self.get.mentalMeter.func:changeValue(15, true)
+                if self.get:purchase(ShopData.antidepressants.cost) then
+                    self.get.mentalMeter.get:changeValue(15, true)
                 end
             else
-                self.get.notif.func:show()
+                self.get.notif.get:show()
                 self.get.notif.text = "Max Mental Health Reached"
                 self.get.notif.color = "#a8ffff"
             end
         end)
-        self.func:createItem("caffeine", function()
-            if self.func:purchase(ShopData.caffeine.cost) then
+        self.get:createItem("caffeine", function()
+            if self.get:purchase(ShopData.caffeine.cost) then
                 GameData.bonusTime = GameData.bonusTime + 10
             end
         end)
         if not GameData.doubleJump then
-            self.func:createItem("newKicks", function(button)
-                if self.func:purchase(ShopData.newKicks.cost) then
+            self.get:createItem("newKicks", function(button)
+                if self.get:purchase(ShopData.newKicks.cost) then
                     GameData.doubleJump = true
-                    button.props.lbl:deactivate()
+                    button.get.lbl:deactivate()
                     button:deactivate()
                 end
             end)
         end
         
-        local exit = self.func:createItem("exit", function()
+        local exit = self.get:createItem("exit", function()
             self:wait(0.5, function()
                 self:createChild("FillTransition", {
                     next = {
@@ -194,10 +194,10 @@ Nodes:define("Shop", "Scene", {
 
     purchase = function(self, value)
         if GameData.money >= value then
-            self.get.moneyText.func:changeValue(-value)
+            self.get.moneyText.get:changeValue(-value)
             return true
         else
-            self.get.notif.func:show()
+            self.get.notif.get:show()
             return false
         end
     end,
@@ -213,9 +213,9 @@ Nodes:define("Shop", "Scene", {
                 cursor = Cursor.Pointer,
                 whilePointerHover = function()
                     if key == "exit" then
-                        self.get.itemDesc.func:show("Exit")
+                        self.get.itemDesc.get:show("Exit")
                     else
-                        self.get.itemDesc.func:show(
+                        self.get.itemDesc.get:show(
                             ShopData[key].name .. ": " .. ShopData[key].desc
                         )
                     end
@@ -225,8 +225,8 @@ Nodes:define("Shop", "Scene", {
                     if self.get.selected then
                         return
                     end
-                    if self.func.onPress then
-                        self.func:onPress()
+                    if self.get.onPress then
+                        self.get:onPress()
                     end
                     self.scale = 1
                     self.get.selected = true
@@ -251,7 +251,7 @@ Nodes:define("Shop", "Scene", {
                 x = item.x,
                 y = item.y + item.height/2 + 6
             })
-            item.props.lbl = lbl
+            item.get.lbl = lbl
         end
 
         return item

@@ -40,10 +40,10 @@ Nodes:define("Money", "Sprite", {
 
         self.y = self.get.startY + math.sin(self.lifeTime * 2 + self.get.timeOffset) * 2
 
-        if not player.props.dead then
+        if not player.get.dead then
             if self.collider:overlaps(player.collider) then
-                self.scene.props.results.moneyCollected = self.scene.props.results.moneyCollected + self.get.value
-                self.scene.props.moneyNotif.func:show("$" .. self.get.value)
+                self.scene.get.results.moneyCollected = self.scene.get.results.moneyCollected + self.get.value
+                self.scene.get.moneyNotif.get:show("$" .. self.get.value)
                 self.audio:play("sfx/coin")
                 self:destroy()
             end
