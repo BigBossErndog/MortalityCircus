@@ -135,6 +135,7 @@ Creator:createWorld({
             audio = "hurt"
         })
         sfx:createChild("Audio", {
+            id = "select",
             audio = "select"
         })
         sfx:createChild("AudioPool", {
@@ -150,5 +151,9 @@ Creator:createWorld({
         })
 
         self:createChild("IntroScene")
+    end,
+
+    onUpdate = function(self)
+        
     end
 })

@@ -35,7 +35,7 @@ Nodes:define("Heart", "Sprite", {
 
         if not player.get.dead then
             if self.collider:overlaps(player.collider) then
-                if player.get.healthBar.get:addHeart() then
+                if player.get.healthBar.func:addHeart() then
                     self.audio:play("sfx/heart")
                     self:destroy()
                 end

@@ -95,7 +95,7 @@ Nodes:define("Player", "Sprite", {
                         anim = "idle"
                         self.collider.damping.x = 0.998
                         self.get.jumping = 0
-                        if self.get:allowControls() then
+                        if self.func:allowControls() then
                             if Controls:isDown("up") then
                                 self.collider.velocity.y = -300
                                 self.get.jumping = 1
@@ -122,7 +122,7 @@ Nodes:define("Player", "Sprite", {
 
                 local control = 0 -- for controlling left/right movement. Prevent moving if left and right are both pressed.
 
-                if self.get:allowControls() then
+                if self.func:allowControls() then
                     if Controls:isDown("left") then
                         control = control - 120
                     end
@@ -160,7 +160,7 @@ Nodes:define("Player", "Sprite", {
             end
 
             if (self.y > self.get.tilemap.bottom) and (not self.scene.get.timer.finished)  then
-                self.get:die({
+                self.func:die({
                     epicenter = {
                         x = self.x - self.collider.velocity.x * 0.02,
                         y = self.y + 32
@@ -174,7 +174,7 @@ Nodes:define("Player", "Sprite", {
 
     hurt = function(self, config)
         if (not self.get.invincible) and (not self.get.dead) then
-            if not self.get.healthBar.get:hurt() then
+            if not self.get.healthBar.func:hurt() then
                 if (not self.get.hurting) and config then
                     if config.epicenter then
                         self.collider.velocity.x = (self.x - config.epicenter.x) * 4
@@ -188,12 +188,12 @@ Nodes:define("Player", "Sprite", {
                     end
                 end
                 self.audio:play("sfx/hurt")
-                self.scene.get.mentalMeter.get:changeValue(-10)
-                local txt = self.scene.get.moneyNotif.get:show("-10")
+                self.scene.get.mentalMeter.func:changeValue(-10)
+                local txt = self.scene.get.moneyNotif.func:show("-10")
                 txt.color = "#a8ffff"
                 self:createChild("Invincibility")
             else
-                self.get:die(config)
+                self.func:die(config)
             end
         end
     end,
@@ -233,11 +233,11 @@ Nodes:define("Player", "Sprite", {
             end
         end
 
-        self.get.healthBar.get:killAll()
+        self.get.healthBar.func:killAll()
 
         self.scene.camera:stopFollow()
 
-        self.scene.get.timer.get:stop()
+        self.scene.get.timer.func:stop()
 
         self.audio:stop("music")
         self.audio:play("sfx/lose")

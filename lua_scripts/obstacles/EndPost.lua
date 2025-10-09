@@ -37,12 +37,12 @@ Nodes:define("EndPost", "Sprite",  {
                     self.scene:createChild("StartSign", {
                         onComplete = function()
                             local loss = -15 - math.floor(GameData.day / 7)*5
-                            self.scene.get.mentalMeter.get:changeValue(loss)
-                            local txt = self.scene.get.moneyNotif.get:show(tostring(loss))
+                            self.scene.get.mentalMeter.func:changeValue(loss)
+                            local txt = self.scene.get.moneyNotif.func:show(tostring(loss))
                             txt.color = "#a8ffff"
 
-                            cameraTarget.get:startFollow()
-                            self.scene.get.timer.get:start()
+                            cameraTarget.func:startFollow()
+                            self.scene.get.timer.func:start()
                             player.get.controlsAllowed = true
                         end
                     })
@@ -57,7 +57,7 @@ Nodes:define("EndPost", "Sprite",  {
         if (not player.get.dead) and (not self.scene.get.timer.get.finished) then
             if self.collider:overlaps(player.collider) and player.collider:hasCollided(Direction.Down) then
                 local timer = self.scene.get.timer
-                timer.get:stop()
+                timer.func:stop()
                 timer.get.finished = true
 
                 self.scene.get.results.finished = true

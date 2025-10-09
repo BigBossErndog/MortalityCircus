@@ -15,7 +15,7 @@ Nodes:define("HealthBar", "Group", {
     onCreate = function(self)
         local setHealth = self.get.health
         for i = 1, setHealth do
-            self.get:addHeart(i, setHealth)
+            self.func:addHeart(i, setHealth)
         end
     end,
 
@@ -77,7 +77,7 @@ Nodes:define("HealthBar", "Group", {
 
     killAll = function(self)
         while self.get.health > 0 do
-            self.get:hurt()
+            self.func:hurt()
         end
     end
 })

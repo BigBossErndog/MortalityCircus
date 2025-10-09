@@ -93,7 +93,7 @@ Nodes:define("Circus", "Scene", {
             x = tilemap.x + tilemap.widthInPixels*(1 -tilemap.origin.x) + 1,
             y = tilemap.y
         })
-
+        
         player.collider:addCollisionTarget(leftBound)
         player.collider:addCollisionTarget(rightBound)
 

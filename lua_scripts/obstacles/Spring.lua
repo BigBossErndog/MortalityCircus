@@ -38,7 +38,7 @@ Nodes:define("Spring", "Sprite", {
 
         self.cropTop = self.get.pad.y + 16 + 1
         
-        if self.get.state == 1 and player.get:allowControls() and not player.get.dead then
+        if self.get.state == 1 and player.func:allowControls() and not player.get.dead then
             if self.collider:overlaps(player.collider) then
                 self.get.state = 2
 

@@ -6,7 +6,7 @@ Nodes:define("CameraTarget", "Node", {
     end,
 
     onCreate = function(self)
-        self.get:updatePosition()
+        self.func:updatePosition()
     end,
 
     startFollow = function(self)
@@ -25,6 +25,6 @@ Nodes:define("CameraTarget", "Node", {
     end,
 
     onUpdate = function(self)
-        self.get:updatePosition()
+        self.func:updatePosition()
     end
 })

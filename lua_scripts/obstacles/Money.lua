@@ -43,7 +43,7 @@ Nodes:define("Money", "Sprite", {
         if not player.get.dead then
             if self.collider:overlaps(player.collider) then
                 self.scene.get.results.moneyCollected = self.scene.get.results.moneyCollected + self.get.value
-                self.scene.get.moneyNotif.get:show("$" .. self.get.value)
+                self.scene.get.moneyNotif.func:show("$" .. self.get.value)
                 self.audio:play("sfx/coin")
                 self:destroy()
             end

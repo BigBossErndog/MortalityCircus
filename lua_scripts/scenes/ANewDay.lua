@@ -33,8 +33,8 @@ Nodes:define("BoardButton", "Sprite", {
             self.get.txt.visible = false
             self.get.selected = true
 
-            if self.get.onPress then
-                self.get:onPress()
+            if self.func.onPress then
+                self.func:onPress()
             end
 
             self.tween:to({
@@ -128,9 +128,9 @@ Nodes:define("ANewDay", "Scene", {
         })
 
         if GameData.day == GameData.rentDay then
-            self.get:payRent()
+            self.func:payRent()
         else
-            self.get:startDay()
+            self.func:startDay()
         end
     end,
 
@@ -193,7 +193,7 @@ Nodes:define("ANewDay", "Scene", {
                                                         self:wait(0.5, function()
                                                             GameData.rentDay = GameData.rentDay + 7
                                                             GameData.rentAmount = math.round(GameData.rentAmount * 1.2)
-                                                            self.get:startDay()
+                                                            self.func:startDay()
                                                         end)
                                                     end
                                                 })
@@ -272,7 +272,7 @@ Nodes:define("ANewDay", "Scene", {
                 rate = 24,
                 onComplete = function()
                     self:wait(0.5, function()
-                        self.get:createButtons()
+                        self.func:createButtons()
                     end)
                 end,
                 skipCondition = function()
@@ -302,7 +302,7 @@ Nodes:define("ANewDay", "Scene", {
             icon = 1,
             text = "Go To Work",
             onPress = function()
-                self.get:hideButtons()
+                self.func:hideButtons()
                 self:wait(0.8, function()
                     self.audio:getChild("music").tween:to({
                         volume = 0,
@@ -342,7 +342,7 @@ Nodes:define("ANewDay", "Scene", {
                 y = 4,
                 text = "Go Shopping",
                 onPress = function()
-                    self.get:hideButtons()
+                    self.func:hideButtons()
 
                     self:wait(0.8, function()
                         self.scene:createChild("FillTransition", {
@@ -376,7 +376,7 @@ Nodes:define("ANewDay", "Scene", {
                 icon = 3,
                 text = "Family Time",
                 onPress = function()
-                    self.get:hideButtons()
+                    self.func:hideButtons()
 
                     self:wait(0.8, function()
                         self.scene:createChild("FillTransition", {

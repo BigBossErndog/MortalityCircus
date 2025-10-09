@@ -21,7 +21,7 @@ Nodes:define("EndSign", "Sprite", {
         self:bringToFront()
 
         if self.get.ending then
-            self.scene.get.healthBar.get:recHealth()
+            self.scene.get.healthBar.func:recHealth()
             self.audio:getChild("music").tween:to({
                 volume = 0,
                 duration = 2,

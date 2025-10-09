@@ -28,7 +28,7 @@ Nodes:define("Spike", "Sprite", {
 
     onUpdate = function(self)
         if self.collider:overlaps(self.get.player.collider) then
-            self.get.player.get:hurt({
+            self.get.player.func:hurt({
                 cause = self,
                 epicenter = self.pos + Vector2.new(8, 16)
             })

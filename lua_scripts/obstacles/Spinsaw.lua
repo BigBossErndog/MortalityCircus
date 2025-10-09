@@ -60,7 +60,7 @@ Nodes:define("Spinsaw", "Sprite", {
             yoyo = true,
             repeats = -1,
             onComplete = function()
-                self.get:moveToStart()
+                self.func:moveToStart()
             end
         })
     end,
@@ -70,7 +70,7 @@ Nodes:define("Spinsaw", "Sprite", {
         self.tint = Colors.White
         if self.get.player and (not self.get.player.get.dead) and (not self.scene.get.timer.get.finished) then
             if self.collider:overlaps(self.get.player.collider) then
-                self.get.player.get:hurt({
+                self.get.player.func:hurt({
                     epicenter = self.pos
                 })
             end

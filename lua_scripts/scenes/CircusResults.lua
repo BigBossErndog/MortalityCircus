@@ -76,18 +76,18 @@ Nodes:define("CircusResults", "Scene", {
             GameData.tutorialCompleted = true
         end
 
-        self.get:createResult("Money Collected", self.get.moneyCollected)
+        self.func:createResult("Money Collected", self.get.moneyCollected)
         
         if self.get.heartsLeft > 0 then
-            self.get:createResult("Hearts Left", self.get.heartsLeft * 25)
+            self.func:createResult("Hearts Left", self.get.heartsLeft * 25)
         end
 
         if self.get.finished then
-            self.get:createResult("Finished", 50, Colors.Green)
+            self.func:createResult("Finished", 50, Colors.Green)
         end
 
         if self.get.notFinish then
-            self.get:createResult("Didn't Finish", -200, Colors.Red)
+            self.func:createResult("Didn't Finish", -200, Colors.Red)
         end
 
         if self.get.total < 0 then

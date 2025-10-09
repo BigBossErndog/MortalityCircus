@@ -37,14 +37,14 @@ Nodes:define("FallingBlock", "Sprite", {
         if (not self.get.falling) and (not self.get.player.get.dead) and (not self.scene.get.timer.get.finished) then
             self.y = self.get.startY - 1
             if self.collider:overlaps(self.get.player.collider) then
-                self.get:fall()
+                self.func:fall()
             else
                 self.y = self.get.startY + 1
                 if self.collider:overlaps(self.get.player.collider) then
                     self.get.hit = true
                     self.collider.velocity.x = (self.x - self.get.player.x)
                     self.collider.velocity.y = -50 - math.random() * 50
-                    self.get:fall()
+                    self.func:fall()
                 end
             end
             self.y = self.get.startY

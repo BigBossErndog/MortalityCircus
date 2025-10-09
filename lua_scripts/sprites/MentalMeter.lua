@@ -17,7 +17,7 @@ Nodes:define("MentalMeter", "Sprite", {
             font = "defaultFont",
             color = "#a8dfff"
         })
-        self.get:showValue(GameData.mentalHealth)
+        self.func:showValue(GameData.mentalHealth)
     end,
 
     showValue = function(self, value, pastMax)
@@ -52,7 +52,7 @@ Nodes:define("MentalMeter", "Sprite", {
             },
             duration = math.abs(value) * 0.01,
             onProgress = function()
-                self.get:showValue(self.get.displayValue)
+                self.func:showValue(self.get.displayValue)
             end
         })
     end

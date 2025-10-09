@@ -50,7 +50,7 @@ Nodes:define("TimeBoard", "Sprite", {
             if self.get.counter <= 0 then
                 self.get.counter = 0
                 self.get.finished = true
-                self.get:stop()
+                self.func:stop()
 
                 self.scene.get.results.notFinish = true
 
