@@ -106,17 +106,17 @@ Nodes:define("Circus", "Scene", {
         for i = 1, #obstacles do
             local obstacle = obstacles[i]
             
-            if obstacle.id == 10 then
+            if obstacle.tileID == 10 then
                 player.x = tilemap.left + (obstacle.tileX + 0.5) * 16
                 player.y = tilemap.top + (obstacle.tileY + 0.5) * 16 - 8.1
-            elseif obstacle.id == 4 then
+            elseif obstacle.tileID == 4 then
                 local spike = self:createChild("Spike", {
                     player = player,
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
                     tileY = obstacle.tileY
                 })
-            elseif obstacle.id == 11 then
+            elseif obstacle.tileID == 11 then
                 local spinsaw = self:createChild("Spinsaw", {
                     player = player,
                     tilemap = tilemap,
@@ -128,7 +128,7 @@ Nodes:define("Circus", "Scene", {
                     startY = obstacle.startY,
                     depth = -1
                 })
-            elseif obstacle.id == 12 then
+            elseif obstacle.tileID == 12 then
                 local spring = self:createChild("Spring", {
                     player = player,
                     tilemap = tilemap,
@@ -136,7 +136,7 @@ Nodes:define("Circus", "Scene", {
                     tileY = obstacle.tileY,
                     depth = -1
                 })
-            elseif obstacle.id == 13 then
+            elseif obstacle.tileID == 13 then
                 local fallingBlock = self:createChild("FallingBlock", {
                     player = player,
                     tilemap = tilemap,
@@ -144,7 +144,7 @@ Nodes:define("Circus", "Scene", {
                     tileY = obstacle.tileY,
                     depth = 1
                 })
-            elseif obstacle.id == 5 then
+            elseif obstacle.tileID == 5 then
                 local money = self:createChild("Money", {
                     player = player,
                     tilemap = tilemap,
@@ -152,7 +152,7 @@ Nodes:define("Circus", "Scene", {
                     tileY = obstacle.tileY,
                     value = 10
                 })
-            elseif obstacle.id == 6 then
+            elseif obstacle.tileID == 6 then
                 local money = self:createChild("Money", {
                     player = player,
                     tilemap = tilemap,
@@ -161,7 +161,7 @@ Nodes:define("Circus", "Scene", {
                     value = 20,
                     frame = 7
                 })
-            elseif obstacle.id == 15 then
+            elseif obstacle.tileID == 15 then
                 local money = self:createChild("Money", {
                     player = player,
                     tilemap = tilemap,
@@ -170,14 +170,14 @@ Nodes:define("Circus", "Scene", {
                     value = 50,
                     frame = 16
                 })
-            elseif obstacle.id == 7 then
+            elseif obstacle.tileID == 7 then
                 local heart = self:createChild("Heart", {
                     player = player,
                     tilemap = tilemap,
                     tileX = obstacle.tileX,
                     tileY = obstacle.tileY
                 })
-            elseif obstacle.id == 16 then
+            elseif obstacle.tileID == 16 then
                 local endPost = self:createChild("EndPost", {
                     player = player,
                     tilemap = tilemap,
